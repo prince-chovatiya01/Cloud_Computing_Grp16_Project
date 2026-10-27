@@ -26,8 +26,18 @@ _db_file.close()
 TEST_DB_PATH = _db_file.name
 TEST_DB_URL = f"sqlite+aiosqlite:///{TEST_DB_PATH}"
 
+# Force test environment variables before ANY application or database import
+os.environ["DATABASE_URL"] = TEST_DB_URL
+os.environ["APP_ENV"] = "test"
+os.environ["ENABLE_FAULT_INJECTION"] = "false"
+
+# Ensure config cache is cleared so test settings take effect immediately
+from app.config import get_settings  # noqa: E402
+get_settings.cache_clear()
+
 # ── Patch app.database BEFORE anything else imports it ───────────────────────
 import app.database as _db_module  # noqa: E402
+import app.models  # noqa: F401 - Register models with Base.metadata
 
 _test_engine = create_async_engine(TEST_DB_URL, echo=False)
 _test_session_factory = async_sessionmaker(

@@ -43,8 +43,11 @@ _STATIC_FALLBACK = [
 ]
 
 
-async def _fetch_recommendations(session, limit: int) -> list[dict]:
+async def _fetch_recommendations(session, limit: int, delay_ms: Optional[int] = None) -> list[dict]:
     """Query recommendations table joined with media, sorted by score."""
+    if delay_ms and delay_ms > 0:
+        logger.warning("Fault injection: delaying recommendation query by %d ms", delay_ms)
+        await asyncio.sleep(delay_ms / 1000)
     stmt = (
         select(Recommendation)
         .options(selectinload(Recommendation.media))  # eager-load to avoid lazy-load after session closes
@@ -110,57 +113,56 @@ async def get_recommendations(
                 ),
             )
 
-    # ── Apply simulated delay ─────────────────────────────────────────────────
-    if simulate_delay and simulate_delay > 0:
-        logger.warning("Fault injection: sleeping %d ms before recommendation query", simulate_delay)
-        await asyncio.sleep(simulate_delay / 1000)
-
     timeout_s = settings.recommendation_timeout_ms / 1000
 
     try:
-        async with AsyncSessionLocal() as session:
-            # ── Primary path ──────────────────────────────────────────────────
-            if simulate_failure:
-                logger.warning("Fault injection: simulating recommendation query failure")
-                raise RuntimeError("Simulated recommendation service failure")
+        # ── Primary path ──────────────────────────────────────────────────────
+        if simulate_failure:
+            logger.warning("Fault injection: simulating recommendation query failure")
+            raise RuntimeError("Simulated recommendation service failure")
 
-            t0 = time.perf_counter()
-            try:
+        t0 = time.perf_counter()
+        try:
+            # Dedicated session for primary recommendation query.
+            # If wait_for times out, the session context exits and closes
+            # the connection cleanly without leaving leaks or dirty state.
+            async with AsyncSessionLocal() as session:
                 items = await asyncio.wait_for(
-                    _fetch_recommendations(session, limit),
+                    _fetch_recommendations(session, limit, delay_ms=simulate_delay),
                     timeout=timeout_s,
                 )
-                latency_ms = round((time.perf_counter() - t0) * 1000, 2)
-                logger.info(
-                    "Recommendations served — count=%d latency_ms=%.2f source=recommendations",
-                    len(items), latency_ms,
-                )
-                return {
-                    "source": "recommendations",
-                    "fallback_reason": None,
-                    "count": len(items),
-                    "latency_ms": latency_ms,
-                    "items": items,
-                }
-            except asyncio.TimeoutError:
-                logger.warning(
-                    "Recommendation query exceeded timeout (%.0f ms), activating fallback",
-                    settings.recommendation_timeout_ms,
-                )
-                # ── Fallback: top-rated catalogue ─────────────────────────────
-                items = await _fetch_top_rated_fallback(session, limit)
-                latency_ms = round((time.perf_counter() - t0) * 1000, 2)
-                logger.info(
-                    "Recommendations served — count=%d latency_ms=%.2f source=fallback_top_rated",
-                    len(items), latency_ms,
-                )
-                return {
-                    "source": "fallback_top_rated",
-                    "fallback_reason": f"Recommendation query exceeded {settings.recommendation_timeout_ms} ms timeout",
-                    "count": len(items),
-                    "latency_ms": latency_ms,
-                    "items": items,
-                }
+            latency_ms = round((time.perf_counter() - t0) * 1000, 2)
+            logger.info(
+                "Recommendations served — count=%d latency_ms=%.2f source=recommendations",
+                len(items), latency_ms,
+            )
+            return {
+                "source": "recommendations",
+                "fallback_reason": None,
+                "count": len(items),
+                "latency_ms": latency_ms,
+                "items": items,
+            }
+        except asyncio.TimeoutError:
+            logger.warning(
+                "Recommendation query exceeded timeout (%.0f ms), activating fallback",
+                settings.recommendation_timeout_ms,
+            )
+            # ── Fallback: top-rated catalogue with fresh session ───────────────
+            async with AsyncSessionLocal() as fallback_session:
+                items = await _fetch_top_rated_fallback(fallback_session, limit)
+            latency_ms = round((time.perf_counter() - t0) * 1000, 2)
+            logger.info(
+                "Recommendations served — count=%d latency_ms=%.2f source=fallback_top_rated",
+                len(items), latency_ms,
+            )
+            return {
+                "source": "fallback_top_rated",
+                "fallback_reason": f"Recommendation query exceeded {settings.recommendation_timeout_ms} ms timeout",
+                "count": len(items),
+                "latency_ms": latency_ms,
+                "items": items,
+            }
 
     except RuntimeError as exc:
         # Simulated or real failure — fall back to static list

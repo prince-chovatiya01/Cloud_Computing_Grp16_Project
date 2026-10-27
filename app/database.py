@@ -19,12 +19,19 @@ from app.config import get_settings
 
 _settings = get_settings()
 
+_engine_kwargs = {
+    "echo": False,
+    "pool_pre_ping": True,
+}
+if not _settings.database_url.startswith("sqlite"):
+    _engine_kwargs.update({
+        "pool_size": 5,
+        "max_overflow": 10,
+    })
+
 engine = create_async_engine(
     _settings.database_url,
-    echo=False,         # set to True during local debugging if needed
-    pool_pre_ping=True, # verify connections before use (important for RDS)
-    pool_size=5,
-    max_overflow=10,
+    **_engine_kwargs,
 )
 
 AsyncSessionLocal = async_sessionmaker(
