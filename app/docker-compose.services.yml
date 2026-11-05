@@ -1,0 +1,85 @@
+##
+## docker-compose.services.yml - Multi-service (S2) local deployment
+##
+## Simulates the production micro-service topology:
+##   - db:              PostgreSQL 16
+##   - catalogue:       catalogue service on port 5001 (owns the network namespace)
+##   - recommendations: recommendations service on port 5002 (shares catalogue's network)
+##   - auth:            auth service on port 5003 (shares catalogue's network)
+##   - gateway:         nginx reverse proxy standing in for the ALB
+##
+## Usage:
+##   docker compose -f docker-compose.services.yml up --build -d
+##
+## Experiment E4 (circuit-breaker):
+##   docker compose -f docker-compose.services.yml stop recommendations
+##   # catalogue should fall back to popular() when breaker trips
+##
+
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: minix
+      POSTGRES_PASSWORD: minix
+      POSTGRES_DB: minix
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U minix -d minix"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  catalogue:
+    build: .
+    environment:
+      SERVICE: catalogue
+      DATABASE_URL: "postgresql://minix:minix@db:5432/minix"
+      PORT: "5001"
+      BREAKER: "${BREAKER:-on}"
+      RECS_URL: "http://127.0.0.1:5002"
+    ports:
+      - "5001:5001"
+      - "5002:5002"
+      - "5003:5003"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  recommendations:
+    build: .
+    network_mode: "service:catalogue"
+    environment:
+      SERVICE: recommendations
+      DATABASE_URL: "postgresql://minix:minix@db:5432/minix"
+      PORT: "5002"
+      FAULTS_ENABLED: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  auth:
+    build: .
+    network_mode: "service:catalogue"
+    environment:
+      SERVICE: auth
+      DATABASE_URL: "postgresql://minix:minix@db:5432/minix"
+      PORT: "5003"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  gateway:
+    image: nginx:alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - catalogue
+
+volumes:
+  pgdata:
