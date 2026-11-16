@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resilience Demo Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel-2: #1e222b; --line: #2a2f3a;
+    --text: #e8eaef; --muted: #9aa1ae;
+    --ok: #2fbf71; --warn: #f0a531; --bad: #ef4d4d; --off: #555b67; --accent: #5b8cff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+           padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 20px; margin: 0; font-weight: 650; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  .spacer { flex: 1; }
+  .badge { padding: 5px 12px; border-radius: 999px; font-weight: 650; font-size: 13px;
+           border: 1px solid var(--line); background: var(--panel-2); white-space: nowrap; }
+  .badge.on { background: rgba(47,191,113,.15); color: var(--ok); border-color: rgba(47,191,113,.5); }
+  .badge.off { background: rgba(239,77,77,.15); color: var(--bad); border-color: rgba(239,77,77,.5); }
+  main { display: grid; grid-template-columns: 340px 1fr; gap: 18px; padding: 18px 24px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 16px; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .card h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 650; }
+  .col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+
+  .steps button { display: flex; width: 100%; align-items: center; gap: 10px; text-align: left;
+                  margin-bottom: 8px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line);
+                  background: var(--panel-2); color: var(--text); font: inherit; cursor: pointer; }
+  .steps button:hover:not(:disabled) { border-color: var(--accent); }
+  .steps button:disabled { opacity: .45; cursor: wait; }
+  .steps .n { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+              background: var(--line); font-size: 12px; font-weight: 700; }
+  .steps .kill .n { background: var(--bad); }
+  .steps .good .n { background: var(--ok); color: #08140d; }
+  .steps .hint { color: var(--muted); font-size: 12px; display: block; }
+  .busy { margin-top: 6px; color: var(--warn); font-size: 13px; min-height: 20px; }
+  .err { color: var(--bad); font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+
+  .arch { display: grid; gap: 8px; }
+  .svc { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--panel-2);
+         border-radius: 8px; border: 1px solid var(--line); }
+  .svc .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--off); flex: none; }
+  .svc.up .dot { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .svc.down { border-color: rgba(239,77,77,.6); }
+  .svc.down .dot { background: var(--bad); box-shadow: 0 0 8px var(--bad); }
+  .svc .name { font-weight: 600; }
+  .svc .role { color: var(--muted); font-size: 12px; }
+  .svc .st { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .indent { margin-left: 22px; }
+
+  .log { font: 12px/1.6 Consolas, ui-monospace, monospace; color: var(--muted); max-height: 180px; overflow: auto; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .kpi .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+  .kpi .value { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .kpi .note { color: var(--muted); font-size: 12px; }
+
+  .strip-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .strip { display: grid; grid-template-columns: repeat(60, 1fr); gap: 3px; }
+  .strip span { aspect-ratio: 1; border-radius: 2px; background: var(--line); }
+  .s-personal { background: var(--ok) !important; }
+  .s-fallback { background: var(--warn) !important; }
+  .s-error { background: var(--bad) !important; }
+  .toggle { margin-left: auto; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; cursor: pointer; }
+
+  .screen { background: #0a0a0c; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .browser-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+  .browser-bar .dots i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--line); margin-right: 4px; }
+  .url { flex: 1; background: var(--bg); border-radius: 6px; padding: 4px 10px; font: 12px Consolas, monospace; color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .code { font: 12px Consolas, monospace; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .code.ok { background: rgba(47,191,113,.2); color: var(--ok); }
+  .code.bad { background: rgba(239,77,77,.2); color: var(--bad); }
+  .page { padding: 18px; min-height: 330px; }
+  .row-title { display: flex; align-items: center; gap: 10px; font-weight: 650; margin: 4px 0 10px; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .tag.personal { background: rgba(47,191,113,.2); color: var(--ok); }
+  .tag.fallback { background: rgba(240,165,49,.2); color: var(--warn); }
+  .row { display: grid; grid-auto-flow: column; grid-auto-columns: 128px; gap: 10px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; }
+  .movie { height: 150px; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: flex-end;
+           position: relative; overflow: hidden; }
+  .movie .t { font-weight: 650; font-size: 13px; line-height: 1.25; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+  .movie .m { font-size: 11px; opacity: .85; }
+  .error-page { display: grid; place-items: center; text-align: center; min-height: 300px; }
+  .error-page .big { font-size: 64px; font-weight: 800; color: var(--bad); line-height: 1; }
+  .error-page p { color: var(--muted); max-width: 440px; }
+  .explain { padding: 12px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 14px; border: 1px solid; }
+  .explain.ok { border-color: rgba(47,191,113,.4); background: rgba(47,191,113,.08); }
+  .explain.warn { border-color: rgba(240,165,49,.5); background: rgba(240,165,49,.08); }
+  .explain.bad { border-color: rgba(239,77,77,.5); background: rgba(239,77,77,.08); }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Mini-Netflix: resilience demo</h1>
+    <div class="sub">Local S2 service split &middot; gateway on localhost:8081 &middot; same failure, with and without a circuit breaker</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="docker" class="badge">Docker: checking...</span>
+  <span id="breaker" class="badge">Breaker: -</span>
+</header>
+
+<main>
+  <div class="col">
+    <section class="card steps">
+      <h2>Demo steps</h2>
+      <button class="good" data-action="start-on"><span class="n">1</span><span>Start services, breaker <b>ON</b><span class="hint">catalogue, recommendations, auth, Postgres, gateway</span></span></button>
+      <button class="kill" data-action="kill-recs"><span class="n">2</span><span>Chaos: kill recommendations<span class="hint">expect 200 + fallback list</span></span></button>
+      <button class="good" data-action="restore-recs"><span class="n">3</span><span>Restore recommendations<span class="hint">breaker half-opens after ~10 s</span></span></button>
+      <button data-action="start-off"><span class="n">4</span><span>Restart services, breaker <b>OFF</b><span class="hint">naive call, no fallback</span></span></button>
+      <button class="kill" data-action="kill-recs"><span class="n">5</span><span>Chaos: kill recommendations again<span class="hint">expect 502 for every home page</span></span></button>
+      <button data-action="down"><span class="n">6</span><span>Clean up<span class="hint">docker compose down</span></span></button>
+      <div class="busy" id="busy"></div>
+      <div class="err" id="err"></div>
+    </section>
+
+    <section class="card">
+      <h2>Architecture (live container state)</h2>
+      <div class="arch">
+        <div class="svc" data-svc="gateway"><span class="dot"></span><div><div class="name">Gateway</div><div class="role">nginx, stands in for the ALB</div></div><span class="st"></span></div>
+        <div class="svc indent" data-svc="catalogue"><span class="dot"></span><div><div class="name">Catalogue</div><div class="role">home page, calls recommendations</div></div><span class="st"></span></div>
+        <div class="svc indent" data-svc="recommendations"><span class="dot"></span><div><div class="name">Recommendations</div><div class="role">personal picks per user</div></div><span class="st"></span></div>
+        <div class="svc indent" data-svc="auth"><span class="dot"></span><div><div class="name">Auth</div><div class="role">/login</div></div><span class="st"></span></div>
+        <div class="svc indent" data-svc="db"><span class="dot"></span><div><div class="name">Postgres</div><div class="role">stands in for RDS</div></div><span class="st"></span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Event log</h2>
+      <div class="log" id="log"><span class="muted">No actions yet.</span></div>
+    </section>
+  </div>
+
+  <div class="col">
+    <div class="kpis">
+      <div class="kpi"><div class="label">Availability</div><div class="value" id="k-avail">-</div><div class="note">HTTP 200 within 1 s, last 60 requests</div></div>
+      <div class="kpi"><div class="label">Last response</div><div class="value" id="k-status">-</div><div class="note" id="k-status-note">&nbsp;</div></div>
+      <div class="kpi"><div class="label">Latency</div><div class="value" id="k-lat">-</div><div class="note">last request, ms</div></div>
+      <div class="kpi"><div class="label">On fallback</div><div class="value" id="k-fb">-</div><div class="note">share of last 60 home pages</div></div>
+    </div>
+
+    <section class="card">
+      <div class="strip-head">
+        <h2 style="margin:0">Live traffic (one square per home-page request)</h2>
+        <div class="legend"><span><i class="s-personal"></i>200 personal</span><span><i class="s-fallback"></i>200 fallback</span><span><i class="s-error"></i>error</span></div>
+        <label class="toggle"><input type="checkbox" id="traffic" checked> send traffic</label>
+      </div>
+      <div class="strip" id="strip"></div>
+    </section>
+
+    <section class="screen">
+      <div class="browser-bar">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="url" id="url">http://localhost:8081/?user=user1</span>
+        <span class="code" id="code"></span>
+      </div>
+      <div class="page" id="page"><p class="muted">Press <b>1. Start services</b> to begin. The first start builds the images and can take a minute or two.</p></div>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const WINDOW = 60;
+const history = [];
+let userN = 0;
+let busy = false;
+
+// strip cells
+const strip = $("#strip");
+for (let i = 0; i < WINDOW; i++) strip.appendChild(document.createElement("span"));
+
+function hue(str) { let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function movieRow(list) {
+  return `<div class="row">${(list || []).map((m) => {
+    const h = hue(m.title || "");
+    return `<div class="movie" style="background:linear-gradient(160deg,hsl(${h} 55% 38%),hsl(${(h + 40) % 360} 60% 14%))">
+      <div class="t">${esc(m.title)}</div><div class="m">${esc(m.genre)} &middot; ${Number(m.rating).toFixed(1)}</div></div>`;
+  }).join("")}</div>`;
+}
+
+function render(r, user) {
+  $("#url").textContent = `http://localhost:8081/?user=${user}`;
+  const code = $("#code");
+  code.textContent = r.status || "---";
+  code.className = "code " + (r.status === 200 ? "ok" : "bad");
+  const page = $("#page");
+  if (r.status === 200 && r.data && r.data.trending) {
+    const d = r.data, fb = d.recommendations_source === "fallback";
+    const explain = fb
+      ? `<div class="explain warn"><b>Graceful degradation.</b> Recommendations is unavailable, so the circuit breaker is open and the page shows a generic popular list. The user still gets a working page.</div>`
+      : `<div class="explain ok"><b>Healthy.</b> The catalogue called the recommendations service and got personal picks for ${esc(user)}.</div>`;
+    page.innerHTML = explain +
+      `<div class="row-title">Recommended for ${esc(user)} <span class="tag ${fb ? "fallback" : "personal"}">${fb ? "FALLBACK: popular list" : "PERSONAL"}</span></div>` +
+      movieRow(d.recommendations) +
+      `<div class="row-title">Trending now</div>` + movieRow(d.trending);
+  } else {
+    const detail = r.error || (r.data && (r.data.error || r.data.raw)) || "";
+    const why = r.status === 502
+      ? "Recommendations is down and there is no circuit breaker or fallback, so one failed dependency breaks the whole home page (cascading failure)."
+      : "The gateway did not answer. The services are probably stopped or still starting.";
+    page.innerHTML = `<div class="explain bad"><b>Failure.</b> ${why}</div>
+      <div class="error-page"><div><div class="big">${r.status || "No answer"}</div>
+      <p>${esc(detail)}</p></div></div>`;
+  }
+}
+
+function recordAndKpis(r) {
+  const kind = r.status === 200 ? (r.source === "fallback" ? "fallback" : "personal") : "error";
+  history.push({ kind, ok: r.status === 200 && r.ms <= 1000 });
+  if (history.length > WINDOW) history.shift();
+  const cells = strip.children;
+  for (let i = 0; i < WINDOW; i++) {
+    const h = history[i - (WINDOW - history.length)];
+    cells[i].className = h ? "s-" + h.kind : "";
+  }
+  const ok = history.filter((h) => h.ok).length;
+  const fb = history.filter((h) => h.kind === "fallback").length;
+  const avail = (100 * ok) / history.length;
+  const a = $("#k-avail");
+  a.textContent = avail.toFixed(1) + "%";
+  a.style.color = avail >= 99 ? "var(--ok)" : avail >= 90 ? "var(--warn)" : "var(--bad)";
+  const s = $("#k-status");
+  s.textContent = r.status || "---";
+  s.style.color = r.status === 200 ? "var(--ok)" : "var(--bad)";
+  $("#k-status-note").textContent = r.status === 200 ? "recs = " + (r.source || "?") : (r.error || "error");
+  $("#k-lat").textContent = r.ms;
+  $("#k-fb").textContent = ((100 * fb) / history.length).toFixed(0) + "%";
+}
+
+async function trafficLoop() {
+  while (true) {
+    if ($("#traffic").checked) {
+      const user = "user" + ((userN++ % 20) + 1);
+      try {
+        const r = await (await fetch("/api/probe?user=" + user, { cache: "no-store" })).json();
+        recordAndKpis(r);
+        render(r, user);
+      } catch (e) { /* dashboard server gone */ }
+    }
+    await new Promise((res) => setTimeout(res, 400));
+  }
+}
+
+async function statusLoop() {
+  while (true) {
+    try {
+      const st = await (await fetch("/api/status", { cache: "no-store" })).json();
+      const d = $("#docker");
+      d.textContent = st.docker ? "Docker: running" : "Docker: not reachable";
+      d.className = "badge " + (st.docker ? "on" : "off");
+      const b = $("#breaker");
+      b.textContent = st.breaker ? "Circuit breaker: " + st.breaker.toUpperCase() : "Circuit breaker: -";
+      b.className = "badge " + (st.breaker === "on" ? "on" : st.breaker === "off" ? "off" : "");
+      document.querySelectorAll(".svc").forEach((el) => {
+        const s = st.services[el.dataset.svc];
+        el.classList.toggle("up", s === "running");
+        el.classList.toggle("down", !!s && s !== "running");
+        el.querySelector(".st").textContent = s || "not created";
+      });
+      busy = st.job.busy;
+      $("#busy").textContent = busy ? st.job.label + "..." : "";
+      $("#err").textContent = st.job.error || "";
+      document.querySelectorAll(".steps button").forEach((btn) => (btn.disabled = busy));
+      if (st.job.log.length) {
+        $("#log").innerHTML = st.job.log.slice().reverse().map((l) =>
+          `<div>${new Date(l.ts * 1000).toLocaleTimeString()}  ${esc(l.text)}</div>`).join("");
+      }
+    } catch (e) {
+      $("#docker").textContent = "Dashboard server stopped";
+      $("#docker").className = "badge off";
+    }
+    await new Promise((res) => setTimeout(res, 1500));
+  }
+}
+
+document.querySelectorAll(".steps button").forEach((btn) => btn.addEventListener("click", async () => {
+  if (busy) return;
+  busy = true;
+  document.querySelectorAll(".steps button").forEach((b) => (b.disabled = true));
+  const r = await fetch("/api/action/" + btn.dataset.action, { method: "POST" });
+  if (!r.ok) $("#err").textContent = (await r.json()).error || "action failed";
+}));
+
+trafficLoop();
+statusLoop();
+</script>
+</body>
+</html>

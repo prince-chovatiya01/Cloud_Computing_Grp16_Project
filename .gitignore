@@ -26,3 +26,13 @@ infra/.terraform/
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
 infra/*.tfvars
+
+# Terraform (all stacks): state can contain secrets, providers are large
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+**/*.tfvars
+
+# Credentials
+*.pem
