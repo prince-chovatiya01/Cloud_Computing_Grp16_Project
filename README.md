@@ -343,38 +343,6 @@ questions.
 
 ------------------------------------------------------------------------
 
-## 8. Likely Viva Questions to Prepare For
-
--   Why did Netflix leave its own data center, and why did the migration
-    take seven years?
--   Why microservices and NoSQL instead of the monolith and Oracle?
--   What is Chaos Monkey, and how is it different from Chaos Gorilla and
-    Chaos Kong?
--   How does an Auto Scaling Group recover from a terminated instance,
-    and what determines recovery time?
--   What did your results show, and what would change at Netflix's
-    scale?
--   Where is the cloud more expensive than on-prem? (Netflix still runs
-    its own CDN, Open Connect.)
--   What were the limits of your experiment, and what would you do with
-    more time or budget?
-
-------------------------------------------------------------------------
-
-## 9. Tips for Scoring Well
-
--   Cite primary sources (Netflix Tech Blog, AWS pages), not only
-    secondary articles.
--   Mark what is a **public fact** and what is **your own estimate**,
-    especially for costs.
--   Show raw measurements and the method, so results are reproducible.
--   Include a "limitations" section. Graders value honest analysis.
--   Keep a running log of effort in hours for the migration comparison.
--   Take screenshots and save scripts and CSVs in this repository as
-    evidence for the viva.
-
-------------------------------------------------------------------------
-
 ## 10. Suggested Repository Layout
 
 ``` text
