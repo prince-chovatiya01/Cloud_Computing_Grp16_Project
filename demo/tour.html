@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini-Netflix Project Tour</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel-2: #1e222b; --line: #2a2f3a;
+    --text: #e8eaef; --muted: #9aa1ae; --faint: #6b7280;
+    --ok: #2fbf71; --warn: #f0a531; --bad: #ef4d4d; --accent: #5b8cff; --violet: #a78bfa;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 14px; padding: 12px 22px; border-bottom: 1px solid var(--line);
+           background: var(--panel); flex: none; }
+  header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  .spacer { flex: 1; }
+  .navbtn { background: var(--panel-2); border: 1px solid var(--line); color: var(--text); border-radius: 8px;
+            padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .navbtn:hover { border-color: var(--accent); }
+  .layout { flex: 1; display: grid; grid-template-columns: 250px 1fr; min-height: 0; }
+  nav { border-right: 1px solid var(--line); background: var(--panel); overflow-y: auto; padding: 10px 0; }
+  nav a { display: flex; gap: 10px; align-items: baseline; padding: 7px 18px; color: var(--muted); text-decoration: none;
+          font-size: 14px; border-left: 3px solid transparent; }
+  nav a .n { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); width: 18px; flex: none; }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--text); background: var(--panel-2); border-left-color: var(--accent); }
+  nav .group { padding: 12px 18px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
+  main { overflow-y: auto; padding: 26px 34px 60px; min-width: 0; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav { display: flex; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 0; }
+    nav .group { display: none; }
+    nav a { white-space: nowrap; border-left: 0; border-bottom: 3px solid transparent; }
+    nav a.active { border-bottom-color: var(--accent); }
+    main { padding: 18px 16px 50px; }
+  }
+  section.chapter { display: none; max-width: 1180px; }
+  section.chapter.active { display: block; }
+  h2 { font-size: 26px; margin: 0 0 4px; font-weight: 700; }
+  h3 { font-size: 16px; margin: 26px 0 10px; font-weight: 650; }
+  .lead { color: var(--muted); font-size: 16px; margin: 0 0 20px; max-width: 900px; }
+  p { max-width: 900px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .grid { display: grid; gap: 14px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 900px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+  .claim { font-size: 20px; font-weight: 600; padding: 18px 22px; border-left: 4px solid var(--accent);
+           background: var(--panel); border-radius: 0 12px 12px 0; margin: 0 0 22px; max-width: 900px; }
+  .stat .v { font-size: 30px; font-weight: 750; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .stat .l { color: var(--muted); font-size: 13px; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); } .warn { color: var(--warn); } .acc { color: var(--accent); }
+  .muted { color: var(--muted); } .small { font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tablewrap { overflow-x: auto; }
+  .pipeline { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin: 6px 0 4px; }
+  .stage { flex: 1 1 180px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; }
+  .stage .k { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--accent); }
+  .stage .t { font-weight: 650; margin: 2px 0 4px; }
+  .stage .d { color: var(--muted); font-size: 13px; }
+  .arrow { display: grid; place-items: center; color: var(--faint); padding: 0 6px; font-size: 20px; }
+  .diagram { background: #fff; border-radius: 12px; padding: 12px; }
+  .diagram img { width: 100%; display: block; }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 650; border: 1px solid var(--line); background: var(--panel-2); }
+  .pill.ok { color: var(--ok); border-color: rgba(47,191,113,.45); background: rgba(47,191,113,.1); }
+  .pill.bad { color: var(--bad); border-color: rgba(239,77,77,.45); background: rgba(239,77,77,.1); }
+  .pill.warn { color: var(--warn); border-color: rgba(240,165,49,.45); background: rgba(240,165,49,.1); }
+  .talk { border: 1px dashed var(--line); border-radius: 10px; padding: 10px 14px; color: var(--muted); font-size: 14px; margin-top: 18px; max-width: 900px; }
+  .talk b { color: var(--text); }
+  ul.tight { margin: 6px 0; padding-left: 20px; } ul.tight li { margin: 3px 0; }
+  code, .mono { font-family: Consolas, ui-monospace, monospace; font-size: 13px; }
+  code { background: var(--panel-2); padding: 1px 5px; border-radius: 4px; }
+
+  /* tabs */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 14px; }
+  .tabs button { background: var(--panel-2); border: 1px solid var(--line); color: var(--muted); border-radius: 8px; padding: 7px 12px;
+                 font: inherit; font-size: 13px; cursor: pointer; }
+  .tabs button.active { color: var(--text); border-color: var(--accent); background: rgba(91,140,255,.12); }
+
+  /* replay */
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .controls button { background: var(--accent); border: 0; color: #fff; border-radius: 8px; padding: 8px 16px; font: inherit; font-weight: 650; cursor: pointer; }
+  .controls button.sec { background: var(--panel-2); border: 1px solid var(--line); color: var(--text); font-weight: 500; }
+  .controls select { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; font: inherit; }
+  .controls input[type=range] { flex: 1; min-width: 160px; accent-color: var(--accent); }
+  .controls .clock { font-variant-numeric: tabular-nums; font-family: Consolas, monospace; min-width: 110px; }
+  .replays { display: grid; gap: 14px; }
+  .replays.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 1000px) { .replays.two { grid-template-columns: 1fr; } }
+  .rp .title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .rp .title b { font-size: 15px; }
+  .rp canvas { width: 100%; display: block; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+  .kpi { background: var(--panel-2); border-radius: 8px; padding: 8px 10px; }
+  .kpi .l { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  .kpi .v { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ticker { font-size: 13px; max-height: 150px; overflow-y: auto; border-top: 1px solid var(--line); padding-top: 8px; }
+  .ticker div { padding: 2px 0; color: var(--muted); }
+  .ticker div b { color: var(--text); font-variant-numeric: tabular-nums; font-family: Consolas, monospace; font-weight: 500; margin-right: 6px; }
+  .ticker .kill { color: #ffb4b4; }
+  .ticker .heal { color: #a7f3c9; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .loading { color: var(--muted); padding: 30px; text-align: center; }
+
+  /* code + logs */
+  .viewer { display: grid; grid-template-columns: 260px 1fr; gap: 14px; }
+  @media (max-width: 900px) { .viewer { grid-template-columns: 1fr; } }
+  .viewer > div, .api > div { min-width: 0; }
+  .filelist { display: flex; flex-direction: column; gap: 4px; max-height: 620px; overflow-y: auto; }
+  .filelist button { text-align: left; background: var(--panel); border: 1px solid var(--line); color: var(--muted); border-radius: 8px;
+                     padding: 7px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+  .filelist button .sub { display: block; font-size: 12px; color: var(--faint); }
+  .filelist button.active { color: var(--text); border-color: var(--accent); }
+  pre.src { margin: 0; background: #0a0b0e; border: 1px solid var(--line); border-radius: 10px; padding: 10px 0; overflow: auto;
+            max-height: 560px; font: 12.5px/1.55 Consolas, ui-monospace, monospace; }
+  pre.src .ln { display: block; padding: 0 14px 0 0; white-space: pre; }
+  pre.src .ln::before { content: attr(data-n); display: inline-block; width: 48px; padding-right: 12px; text-align: right; color: #4b5260; user-select: none; }
+  pre.src .ln.hl { background: rgba(91,140,255,.14); box-shadow: inset 3px 0 0 var(--accent); }
+  .explain { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; font-size: 14px; }
+  .explain ul { margin: 6px 0 0; padding-left: 18px; }
+
+  /* api explorer */
+  .api { display: grid; grid-template-columns: 300px 1fr; gap: 14px; }
+  @media (max-width: 900px) { .api { grid-template-columns: 1fr; } }
+  .api .calls button { display: block; width: 100%; text-align: left; margin-bottom: 6px; background: var(--panel); border: 1px solid var(--line);
+                       color: var(--text); border-radius: 8px; padding: 8px 10px; font: 13px Consolas, monospace; cursor: pointer; }
+  .api .calls button:hover { border-color: var(--accent); }
+  .api .calls button span { display: block; font: 12px "Segoe UI", system-ui, sans-serif; color: var(--muted); }
+  .resp-head { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; font-size: 13px; }
+  iframe.breaker { width: 100%; height: 900px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+  pre.out { background: #0a0b0e; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; max-height: 520px; overflow: auto;
+            font: 12.5px/1.5 Consolas, ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; margin: 0; }
+  .imgcard img { width: 100%; display: block; border-radius: 8px; background: #fff; }
+  .imgcard .cap { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .footer-nav { display: flex; justify-content: space-between; margin-top: 34px; gap: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Mini-Netflix: project tour</h1>
+    <div class="sub">IT457 Group 16 &middot; Netflix's AWS migration and chaos engineering, reproduced in miniature</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="navbtn" id="prev">&larr; Prev</button>
+  <button class="navbtn" id="next">Next &rarr;</button>
+</header>
+
+<div class="layout">
+<nav id="nav"></nav>
+<main id="main">
+
+<!-- 1 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="overview" data-title="Overview" data-group="The story">
+  <h2>Mini-Netflix: migrate it, then break it on purpose</h2>
+  <p class="lead">Netflix took seven years to move from its own data center to AWS, and invented chaos engineering along the way. We reproduced the same journey with a small movie-catalogue app, then measured what happened when we broke it.</p>
+  <div class="claim">Moving to the cloud is not enough. The <span class="acc">architecture</span> is what makes a system survive failure, and the only way to prove it is to break it on purpose.</div>
+
+  <div class="pipeline">
+    <div class="stage"><div class="k">S0</div><div class="t">Baseline</div><div class="d">Monolith + Postgres in Docker on a laptop. "Netflix's own data center".</div></div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><div class="k">S1 &middot; REHOST</div><div class="t">Lift-and-shift</div><div class="d">The same containers on one EC2 server in one AZ.</div></div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><div class="k">S2 &middot; REFACTOR</div><div class="t">Cloud-native</div><div class="d">3 services, load balancer, Auto Scaling Group (2–4 servers, 2 AZs), RDS.</div></div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><div class="k">S3–S5</div><div class="t">Chaos, compare, cost</div><div class="d">Our Chaos Monkey kills servers, an AZ, a service. Cost model vs on-prem.</div></div>
+  </div>
+
+  <h3>The headline results (all measured)</h3>
+  <div class="grid g4">
+    <div class="card stat"><div class="v bad">37.5%</div><div class="l">S1 availability when its one server was stopped. 9-minute outage that a restart did not fix.</div></div>
+    <div class="card stat"><div class="v ok">98.9–99.5%</div><div class="l">S2 availability while losing 3 servers, or a whole AZ. No gap longer than 5 s.</div></div>
+    <div class="card stat"><div class="v ok">100% <span class="muted" style="font-size:18px">vs</span> <span class="bad">59.6%</span></div><div class="l">Home page with vs without the circuit breaker when recommendations died.</div></div>
+    <div class="card stat"><div class="v acc">2 &rarr; 4</div><div class="l">Servers added by the Auto Scaling Group on its own under heavy load.</div></div>
+  </div>
+
+  <h3>How to use this tour</h3>
+  <ul class="tight muted">
+    <li>Use <b>Next / Prev</b> (or the arrow keys) to move through the chapters in presentation order.</li>
+    <li>Chapters marked <span class="pill ok">live</span> drive the real app in Docker on this laptop. The others replay the <b>recorded raw data</b> from <code>results/</code>, second by second.</li>
+    <li>AWS was built with Terraform on 14 Nov 2026 and destroyed afterwards, so the AWS chapters are replays of those runs, not animations.</li>
+  </ul>
+</section>
+
+<!-- 2 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="netflix" data-title="The Netflix case" data-group="The story">
+  <h2>The Netflix case</h2>
+  <p class="lead">August 2008: a database corruption stopped Netflix shipping DVDs for three days. The cause was single points of failure.</p>
+  <div class="grid g3">
+    <div class="card"><b>The problem</b><ul class="tight muted small">
+      <li>One data center, one monolith, one vertically scaled database</li>
+      <li>Hardware ordered months ahead for unpredictable streaming growth</li>
+      <li>Running data centers was "undifferentiated heavy lifting"</li></ul></div>
+    <div class="card"><b>The decision</b><ul class="tight muted small">
+      <li>Not a 2nd data center (keeps cost and the monolith)</li>
+      <li>Not lift-and-shift (keeps every software single point of failure)</li>
+      <li><b class="acc">Move to AWS and rebuild cloud-native</b>: 7 years, done Jan 2016</li></ul></div>
+    <div class="card"><b>The result</b><ul class="tight muted small">
+      <li>Toward 99.99% availability; 130 new countries in Jan 2016</li>
+      <li>Cloud cost per stream start "a fraction" of the data center (a side benefit)</li>
+      <li>Video still on its own CDN, Open Connect: hybrid</li></ul></div>
+  </div>
+
+  <h3>Architecture before and after</h3>
+  <div class="diagram"><img src="/files/docs/diagrams/netflix-before-after.svg" alt="Netflix architecture before and after the migration"></div>
+
+  <h3>Chaos engineering: widen the blast radius, then automate it</h3>
+  <div class="tablewrap card" style="padding:4px 8px">
+  <table>
+    <tr><th>Tool</th><th>Breaks</th><th>Proves</th><th>Our version</th></tr>
+    <tr><td><b>Chaos Monkey</b></td><td>a random instance</td><td>services survive losing any one instance</td><td><code>chaos_monkey.py</code> &rarr; E1</td></tr>
+    <tr><td><b>Latency Monkey</b></td><td>adds delay to calls</td><td>timeouts and fallbacks work</td><td><code>fault.py latency</code> &rarr; E3</td></tr>
+    <tr><td><b>Chaos Gorilla</b></td><td>a whole Availability Zone</td><td>services are spread across AZs</td><td><code>chaos_monkey.py --az</code> &rarr; E2</td></tr>
+    <tr><td><b>Chaos Kong</b></td><td>a whole region</td><td>traffic can move to another region</td><td>future work</td></tr>
+    <tr><td><b>Hystrix</b></td><td>(protects) timeout + circuit breaker + fallback</td><td>one failure does not cascade</td><td><code>pybreaker</code> &rarr; E3, E4</td></tr>
+    <tr><td><b>FIT / ChAP / AWS FIS</b></td><td>targeted, automated, with auto-stop</td><td>safe, continuous chaos</td><td><code>infra/s2/fis.tf</code> (written, not run)</td></tr>
+  </table></div>
+  <div class="talk"><b>Principles we followed in every experiment:</b> define a steady state (home page returns 200 within 1 s), hypothesise it continues, inject a real-world failure, try to disprove the hypothesis, keep the blast radius small.</div>
+</section>
+
+<!-- 3 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="arch" data-title="Our architecture" data-group="What we built">
+  <h2>Our architecture</h2>
+  <p class="lead">One Docker image for every stage. Only configuration changes, so any difference in the results comes from the architecture, not the code.</p>
+  <div class="diagram"><img src="/files/docs/diagrams/mini-netflix-stages.svg" alt="S1 and S2 architecture with the chaos actor"></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><span class="pill bad">S1 &middot; rehost</span>
+      <ul class="tight small">
+        <li>One <b>t3.micro</b> in <b>us-east-1a</b>, public IP, Amazon Linux 2023</li>
+        <li>Monolith + Postgres containers on the same VM (<code>infra/s1</code>)</li>
+        <li>Containers restart if the VM restarts, but <b>nothing replaces the VM</b></li>
+        <li><code>terraform apply</code>: <b>33 s</b></li>
+      </ul></div>
+    <div class="card"><span class="pill ok">S2 &middot; refactor</span>
+      <ul class="tight small">
+        <li><b>ALB</b> path routing: <code>/</code> &rarr; catalogue, <code>/recommendations/*</code>, <code>/login</code></li>
+        <li><b>ASG</b> min 2 / max 4 across <b>2 AZs</b>, ELB health checks, CPU target tracking (50%)</li>
+        <li>Every instance runs catalogue, recommendations and auth; <b>stateless</b></li>
+        <li>Data in <b>RDS Postgres</b>; security groups: ALB &rarr; app &rarr; DB only</li>
+        <li><code>terraform apply</code>: <b>~7.5 min</b> (mostly RDS)</li>
+      </ul></div>
+  </div>
+  <h3>Same image, four roles</h3>
+  <div class="card tablewrap" style="padding:4px 8px"><table>
+    <tr><th><code>SERVICE</code></th><th>Endpoints</th><th>Where</th></tr>
+    <tr><td><code>monolith</code></td><td>everything in one process; recommendations is a function call</td><td>S0, S1</td></tr>
+    <tr><td><code>catalogue</code></td><td><code>/</code>, <code>/movies</code>, <code>/movies/&lt;id&gt;</code>; calls recommendations over HTTP with the breaker</td><td>S2</td></tr>
+    <tr><td><code>recommendations</code></td><td><code>/recommendations/&lt;user&gt;</code>, fault injection</td><td>S2</td></tr>
+    <tr><td><code>auth</code></td><td><code>/login</code> (HMAC-signed token)</td><td>S2</td></tr>
+  </table></div>
+</section>
+
+<!-- 4 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="app" data-title="The app (live)" data-group="What we built" data-live="1">
+  <h2>The app <span class="pill ok">live</span></h2>
+  <p class="lead">A movie catalogue: 1,000 seeded movies, 10 genres, 100 users. These calls go through the nginx gateway (our local stand-in for the ALB) to the three services.</p>
+  <p class="small muted">Needs the services running: start them in the next chapter (<b>Circuit breaker</b>, step 1), then come back.</p>
+  <div class="api">
+    <div class="calls" id="apiCalls"></div>
+    <div>
+      <div class="resp-head" id="apiHead"><span class="muted">Click a request on the left.</span></div>
+      <pre class="out" id="apiBody"></pre>
+      <div class="talk"><b>Look at the headers:</b> <code>X-Served-By</code> says which instance and service answered (on AWS it is the real EC2 instance ID), and <code>X-Recs-Source</code> says whether recommendations were <i>personal</i> or the <i>fallback</i>. The load generator records both for every request, which is how we prove which server answered and when the fallback was used.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="breaker" data-title="Circuit breaker (live)" data-group="What we built" data-live="1">
+  <h2>Circuit breaker <span class="pill ok">live</span></h2>
+  <p class="lead">The same failure, with and without a circuit breaker. Run steps 1 to 6 in order. The first start builds the images and can take a minute or two.</p>
+  <div class="grid g3" style="margin-bottom:14px">
+    <div class="card small"><b>Breaker ON</b>: 250 ms timeout; after 5 failures the breaker opens for 10 s and the page serves a popular list. <span class="ok">HTTP 200</span>.</div>
+    <div class="card small"><b>Breaker OFF</b>: 5 s timeout, no fallback. One failed dependency breaks the home page. <span class="bad">HTTP 502</span>.</div>
+    <div class="card small"><b>Half-open</b>: after 10 s one trial call goes through; if it works the breaker closes and personal picks return.</div>
+  </div>
+  <div id="breakerHolder"></div>
+</section>
+
+<!-- 6 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="aws" data-title="Chaos on AWS: S1 vs S2" data-group="Experiments (replays)">
+  <h2>Chaos on AWS: lift-and-shift vs refactor</h2>
+  <p class="lead">Replays of the real runs on 14 Nov 2026, us-east-1. Every bar is one second of recorded home-page requests.</p>
+  <div class="tabs" data-replay-tabs="aws">
+    <button data-preset="e1" class="active">E1: kill an instance (S1 vs S2)</button>
+    <button data-preset="e2">E2: lose a whole AZ (S2)</button>
+  </div>
+  <div data-replay-host="aws"></div>
+  <div class="talk" data-note="aws-e1"><b>What to point at.</b> S1: the only instance is stopped at 63 s; the "operator" restarts it 60 s later and the VM is back, but availability never returns, because a restarted EC2 instance gets a <b>new public IP</b> (44.203.10.200 &rarr; 3.239.110.80) and clients still use the old one. S2: three kills; each time the load balancer keeps serving from the survivor, the ASG launches a replacement within 2 s, and healthy instances return to 2 after 114–176 s. The short red dips are the ~20 s it takes the ALB health check (2 &times; 10 s) to notice a dead target, which is why E1 landed at 98.92%, just under 99%.</div>
+  <div class="talk" data-note="aws-e2" hidden><b>What to point at.</b> The Chaos Gorilla idea: every instance in us-east-1a is terminated at once. us-east-1b keeps serving, the ASG rebuilds capacity in about 143 s, and availability is 99.47% with a longest gap of 4 s. Only one failure happened in this run, so it met the 99% SLO.</div>
+</section>
+
+<!-- 7 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="scale" data-title="Load and scale-out" data-group="Experiments (replays)">
+  <h2>Load and scale-out</h2>
+  <p class="lead">What happens when traffic grows: one machine saturates, while the Auto Scaling Group adds servers on its own.</p>
+  <div class="tabs" data-replay-tabs="scale">
+    <button data-preset="s2e5" class="active">S2 on AWS: heavy ramp 150 &rarr; 450 users</button>
+    <button data-preset="s0e5">S0 laptop: ramp 5 &rarr; 100 users</button>
+  </div>
+  <div data-replay-host="scale"></div>
+  <div class="talk" data-note="scale-s2e5"><b>What to point at.</b> Desired capacity goes 2 &rarr; 3 &rarr; 4 with no human action (the CPU target was lowered from 50% to 30% at about 7:20, because CPU levelled at 43–48%). Throughput rises from about 305 to 370 req/s as instances join. One overloaded instance fails its health check and is replaced; the first replacement is refused by the new account's vCPU quota and the ASG retries a minute later. <b>Honest caveat:</b> almost all the red is <b>client-side timeouts on our laptop</b> (24,421 of 24,423 failures; only 2 were HTTP 502). The laptop load generator saturated at ~300 req/s, so the 500 ms latency criterion (H4) could not be judged.</div>
+  <div class="talk" data-note="scale-s0e5" hidden><b>What to point at.</b> One machine: p95 stays under 50 ms up to ~225 req/s, then climbs and flattens around 185 ms above ~290 req/s, where the single machine saturates. There were no errors. This is the curve the S2 Auto Scaling Group is meant to flatten by adding servers.</div>
+  <h3>AWS's own record of the scale-out</h3>
+  <pre class="out" id="asgLog">Loading results/aws-logs/s2-e5-asg-activities.txt ...</pre>
+</section>
+
+<!-- 8 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="local" data-title="Breaker experiments" data-group="Experiments (replays)">
+  <h2>Breaker experiments, recorded</h2>
+  <p class="lead">The 5-minute runs behind the live demo. The fault starts at 60 s and lasts 120 s.</p>
+  <div class="tabs" data-replay-tabs="local">
+    <button data-preset="e4" class="active">E4: recommendations stopped (ON vs OFF)</button>
+    <button data-preset="e3">E3: +300 ms latency (ON vs OFF)</button>
+  </div>
+  <div data-replay-host="local"></div>
+  <div class="talk" data-note="local-e4"><b>What to point at.</b> Breaker ON: the bars turn amber (fallback) but never red; availability stays at 100.0% in all three runs, and 40.5% of home pages used the fallback, which matches the 40% of the run the fault lasted. Breaker OFF: every home page returns 502 for the whole 120 s; availability is 59.6%. Same app, same failure; only the design differs.</div>
+  <div class="talk" data-note="local-e3" hidden><b>What to point at: slow is worse than down.</b> Without the breaker there are almost no errors, but p95 jumps from ~20 ms to 803 ms and throughput falls 30% (95 &rarr; 67 req/s), because every request waits on the slow call and threads run out. With the breaker, the 250 ms timeout turns "slow" into "failed", the fallback is served, and p95 stays at 21 ms.</div>
+</section>
+
+<!-- 9 ------------------------------------------------------------------------------------ -->
+<section class="chapter" data-id="results" data-title="Results and hypotheses" data-group="Results">
+  <h2>Results and hypotheses</h2>
+  <p class="lead">The hypotheses and thresholds were fixed in Week 2, before any test, so the results could not be bent to fit.</p>
+  <div class="card tablewrap" style="padding:4px 8px"><table>
+    <tr><th>ID</th><th>Hypothesis</th><th>Measured</th><th>Verdict</th></tr>
+    <tr><td><b>H1</b></td><td>Lift-and-shift gains nothing in resilience</td><td>S1 E1: 37.5%, 537 s outage, new IP</td><td><span class="pill ok">Accepted</span></td></tr>
+    <tr><td><b>H2</b></td><td>S2 survives losing any single instance (&ge; 99%, p95 &le; 2&times;)</td><td>E1 98.92% (3 kills, gap &le; 5 s); E2 99.47%; p95 flat</td><td><span class="pill warn">Partly</span></td></tr>
+    <tr><td><b>H3</b></td><td>S2 restores capacity automatically</td><td>Every instance replaced, 114–176 s, no human action</td><td><span class="pill ok">Accepted</span></td></tr>
+    <tr><td><b>H4</b></td><td>S2 scales out with p95 &lt; 500 ms</td><td>Scaled 2 &rarr; 4; latency not testable (laptop was the bottleneck)</td><td><span class="pill warn">Partly</span></td></tr>
+    <tr><td><b>H5</b></td><td>Circuit breaker keeps the home page up</td><td>E4 100% vs 59.6%; E3 p95 21 vs 803 ms</td><td><span class="pill ok">Accepted</span></td></tr>
+    <tr><td><b>H6</b></td><td>Cloud cheaper small/variable, owning cheaper large/steady</td><td>Break-even ~240–308 vCPU; ~187 TB/month (estimate)</td><td><span class="pill ok">Accepted</span></td></tr>
+  </table></div>
+
+  <h3>Every experiment, from the raw data <span class="muted small">(median over runs; read live from <code>results/*/summary.json</code>)</span></h3>
+  <div class="card tablewrap" style="padding:4px 8px"><table id="resultsTable"><tr><td class="muted">Loading...</td></tr></table></div>
+
+  <h3>Charts</h3>
+  <div class="grid g2">
+    <div class="card imgcard"><img src="/files/results/charts/availability_by_experiment.png" alt=""><div class="cap">Home-page availability by experiment (median, whiskers = range).</div></div>
+    <div class="card imgcard"><img src="/files/results/charts/recovery_by_experiment.png" alt=""><div class="cap">Recovery time by experiment.</div></div>
+    <div class="card imgcard"><img src="/files/results/charts/latency_vs_load.png" alt=""><div class="cap">S0 E5: p95 latency against throughput; the knee is one machine saturating.</div></div>
+    <div class="card imgcard"><img src="/files/results/charts/latency_by_experiment.png" alt=""><div class="cap">Latency by experiment.</div></div>
+  </div>
+</section>
+
+<!-- 10 ----------------------------------------------------------------------------------- -->
+<section class="chapter" data-id="evidence" data-title="AWS evidence" data-group="Results">
+  <h2>AWS evidence</h2>
+  <p class="lead">Proof that it really ran on AWS: Terraform logs, AWS's own Auto Scaling activity history, CloudWatch CPU and the clean-up checks.</p>
+  <div class="viewer">
+    <div class="filelist" id="logList"></div>
+    <div><div class="explain" id="logExplain"></div><pre class="out" id="logBody"></pre></div>
+  </div>
+</section>
+
+<!-- 11 ----------------------------------------------------------------------------------- -->
+<section class="chapter" data-id="code" data-title="Code tour" data-group="How it works">
+  <h2>Code tour</h2>
+  <p class="lead">The key pieces of code, with the important lines highlighted.</p>
+  <div class="viewer">
+    <div class="filelist" id="codeList"></div>
+    <div><div class="explain" id="codeExplain"></div><pre class="src" id="codeBody"></pre></div>
+  </div>
+</section>
+
+<!-- 12 ----------------------------------------------------------------------------------- -->
+<section class="chapter" data-id="tests" data-title="Tests (live)" data-group="How it works" data-live="1">
+  <h2>Automated tests <span class="pill ok">live</span></h2>
+  <p class="lead">The app tests use a temporary SQLite database. The Chaos Monkey tests use a fake EC2 client, so nothing touches AWS.</p>
+  <div class="grid g2" style="margin-bottom:14px">
+    <div class="card small"><b>App</b> (<code>app/tests/test_app.py</code>)<ul class="tight muted">
+      <li>every endpoint, 404, login 200/401, <code>X-Served-By</code></li>
+      <li>seeding twice still gives exactly 1,000 movies</li>
+      <li>breaker ON &rarr; 200 + fallback; breaker OFF &rarr; 502</li>
+      <li>fault injection works, and is hidden unless enabled</li></ul></div>
+    <div class="card small"><b>Chaos Monkey safety rails</b> (<code>chaos/test_chaos_monkey.py</code>)<ul class="tight muted">
+      <li>only instances tagged project + stage are targeted</li>
+      <li>refuses to act if more than 4 instances match</li>
+      <li><code>--dry-run</code> touches nothing; <code>--az</code> hits only that AZ</li>
+      <li><code>stop</code> action for S1</li></ul></div>
+  </div>
+  <div class="controls"><button id="runTests">Run pytest</button><span class="muted small" id="testState"></span></div>
+  <pre class="out" id="testOut">Press "Run pytest".</pre>
+</section>
+
+<!-- 13 ----------------------------------------------------------------------------------- -->
+<section class="chapter" data-id="cost" data-title="Cost model" data-group="Wrap-up">
+  <h2>Cost model <span class="pill warn">estimate</span></h2>
+  <p class="lead">From <code>cost/cost_model.py</code>, using on-demand list prices. Netflix's real figures are not public, so these are our own estimates.</p>
+  <div class="grid g4">
+    <div class="card stat"><div class="v">$0.016<span class="muted" style="font-size:15px">/h</span></div><div class="l">S1: one t3.micro, IPv4, EBS</div></div>
+    <div class="card stat"><div class="v">$0.099–0.137<span class="muted" style="font-size:15px">/h</span></div><div class="l">S2 with 2–4 instances, ALB, RDS</div></div>
+    <div class="card stat"><div class="v">240–308</div><div class="l">average vCPU where owning compute breaks even (steady / variable demand)</div></div>
+    <div class="card stat"><div class="v">187 TB<span class="muted" style="font-size:15px">/mo</span></div><div class="l">where an own CDN beats CloudFront for video</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card imgcard"><img src="/files/results/charts/cost_breakeven.png" alt=""><div class="cap">Monthly cost against workload size (log-log).</div></div>
+    <div class="card"><b>What it shows</b>
+      <ul class="tight small">
+        <li>The cloud wins for <b>small or variable</b> workloads: you pay only for the hours you use.</li>
+        <li>Owning wins for <b>huge, steady</b> workloads. Steady demand breaks even earlier, because elasticity is worth less when demand is flat.</li>
+        <li>At Netflix-like 100 PB/month, an own CDN is about <b>$0.13 M</b>/month against <b>$2.1 M</b> on CloudFront.</li>
+        <li>That is exactly Netflix's <b>hybrid</b> choice: AWS for the control plane ("the brain"), Open Connect for the video bytes.</li>
+        <li>A <b>$5/month AWS Budget alert</b> was created first, and everything was destroyed after each session.</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- 14 ----------------------------------------------------------------------------------- -->
+<section class="chapter" data-id="limits" data-title="Limitations and conclusion" data-group="Wrap-up">
+  <h2>Limitations and conclusion</h2>
+  <div class="grid g2">
+    <div class="card"><b>Limitations (said up front)</b>
+      <ul class="tight small muted">
+        <li>One AWS run per experiment, so no range; S2 E1 missed 99% by only 0.08 points.</li>
+        <li>The laptop load generator saturated at ~300 req/s, so H4's latency criterion could not be judged.</li>
+        <li>S1's restart was scripted at exactly 60 s; a real on-call engineer is slower, so S1 is if anything optimistic.</li>
+        <li>India &rarr; us-east-1 adds ~200 ms, so AWS and local latencies are not comparable.</li>
+        <li>3 services and at most 4 instances: no retry storms, deep dependency chains or replication lag.</li>
+        <li>RDS was single-AZ and everything was in one region; FIS templates were written but not run.</li>
+        <li>The cost model uses list prices that were not re-checked against the calculators.</li>
+      </ul></div>
+    <div class="card"><b>With more time or budget</b>
+      <ul class="tight small muted">
+        <li>Repeat every AWS run three times.</li>
+        <li>Run the load generator on EC2 in the same region.</li>
+        <li>Run the FIS templates and compare them with our boto3 Chaos Monkey.</li>
+        <li>Enable RDS Multi-AZ and test a database failover.</li>
+        <li>Add a second region with Route 53 failover (Chaos Kong).</li>
+        <li>Pre-baked AMIs or Fargate for faster recovery.</li>
+      </ul></div>
+  </div>
+  <div class="claim" style="margin-top:22px">Rehosting moved the single point of failure into the cloud. Refactoring removed it. And we only know that because we broke it on purpose.</div>
+  <div class="grid g3">
+    <div class="card stat"><div class="v bad">37.5%</div><div class="l">one rehosted VM, one failure</div></div>
+    <div class="card stat"><div class="v ok">98.9–99.5%</div><div class="l">refactored design, 3 kills or a whole AZ</div></div>
+    <div class="card stat"><div class="v ok">100%</div><div class="l">home page with the circuit breaker, service down</div></div>
+  </div>
+</section>
+
+<div class="footer-nav"><button class="navbtn" id="prev2">&larr; Prev</button><button class="navbtn" id="next2">Next &rarr;</button></div>
+</main>
+</div>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const getJSON = async (u, o) => { const r = await fetch(u, { cache: "no-store", ...o }); return r.json(); };
+const getText = async (u) => { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.text(); };
+
+// ------------------------------------------------------------------ chapters
+const chapters = $$("section.chapter");
+const nav = $("#nav");
+let lastGroup = null;
+chapters.forEach((c, i) => {
+  if (c.dataset.group !== lastGroup) { lastGroup = c.dataset.group; nav.insertAdjacentHTML("beforeend", `<div class="group">${esc(lastGroup)}</div>`); }
+  nav.insertAdjacentHTML("beforeend", `<a href="#${c.dataset.id}" data-i="${i}"><span class="n">${i + 1}</span><span>${esc(c.dataset.title)}</span></a>`);
+});
+let current = 0;
+const onOpen = {};
+function show(i) {
+  current = Math.max(0, Math.min(chapters.length - 1, i));
+  chapters.forEach((c, j) => c.classList.toggle("active", j === current));
+  $$("nav a").forEach((a, j) => a.classList.toggle("active", j === current));
+  const id = chapters[current].dataset.id;
+  if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+  $("#main").scrollTop = 0;
+  if (onOpen[id]) onOpen[id]();
+  Object.values(players).forEach((p) => p.pauseIfHidden());
+}
+nav.addEventListener("click", (e) => { const a = e.target.closest("a"); if (a) { e.preventDefault(); show(+a.dataset.i); } });
+["prev", "prev2"].forEach((id) => $("#" + id).onclick = () => show(current - 1));
+["next", "next2"].forEach((id) => $("#" + id).onclick = () => show(current + 1));
+document.addEventListener("keydown", (e) => {
+  if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  if (e.key === "ArrowRight") show(current + 1);
+  if (e.key === "ArrowLeft") show(current - 1);
+});
+
+// ------------------------------------------------------------------ replay engine
+const COLORS = { ok: "#2fbf71", fb: "#f0a531", bad: "#ef4d4d", grid: "#2a2f3a", text: "#9aa1ae", accent: "#5b8cff", violet: "#a78bfa", ev: "#ef4d4d" };
+const EVENT_TEXT = {
+  "terminate": (e) => `Chaos Monkey terminates ${e.target} (${e.az})`,
+  "az-terminate": (e) => `AZ outage: ${e.target} in ${e.az} terminated`,
+  "stop": (e) => `Chaos Monkey stops the only instance ${e.target}`,
+  "latency": (e) => `Fault: +${(e.note || "").replace("latency_ms=", "")} ms added to recommendations`,
+  "clear": () => "Fault cleared: latency removed",
+  "recs-down": () => "Fault: recommendations service stopped",
+  "recs-up": () => "Recommendations service started again",
+};
+const EVENT_SHORT = { terminate: "kill", "az-terminate": "AZ", stop: "stop", latency: "+lat", clear: "clear", "recs-down": "down", "recs-up": "up" };
+const fmtT = (t) => { t = Math.max(0, Math.floor(t)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
+
+class Replay {
+  constructor(host, spec) {
+    this.spec = spec;
+    this.el = document.createElement("div");
+    this.el.className = "card rp";
+    this.el.innerHTML = `<div class="title"><b>${esc(spec.title)}</b><span class="muted small">${esc(spec.sub || "")}</span></div>
+      <canvas></canvas>
+      <div class="legend">
+        <span><i style="background:${COLORS.ok}"></i>home page OK (personal)</span>
+        <span><i style="background:${COLORS.fb}"></i>OK on fallback</span>
+        <span><i style="background:${COLORS.bad}"></i>failed / slower than 1 s</span>
+        <span><i style="background:${COLORS.ev}; width:3px"></i>chaos event</span></div>
+      <div class="kpis"></div><div class="ticker"></div>`;
+    host.appendChild(this.el);
+    this.canvas = $("canvas", this.el);
+    this.ready = getJSON("/api/replay?run=" + encodeURIComponent(spec.run)).then((d) => {
+      if (d.error) throw new Error(d.error);
+      this.d = d; this.prep(); this.draw(0); return d;
+    }).catch((e) => { this.el.insertAdjacentHTML("beforeend", `<div class="bad small">Could not load ${esc(spec.run)}: ${esc(e.message)}</div>`); });
+  }
+  prep() {
+    const s = this.d.series, n = s.t.length;
+    // per-second availability with forward fill (an empty second keeps the previous state, as analyze.py does)
+    this.av = new Array(n); this.fbf = new Array(n);
+    let prevA = 1, prevF = 0;
+    for (let i = 0; i < n; i++) {
+      if (s.home[i] > 0) { prevA = s.ok[i] / s.home[i]; prevF = Math.min(s.fb[i], s.ok[i]) / s.home[i]; }
+      this.av[i] = prevA; this.fbf[i] = prevF;
+    }
+    this.cumOk = []; this.cumHome = []; let a = 0, b = 0;
+    for (let i = 0; i < n; i++) { a += s.ok[i]; b += s.home[i]; this.cumOk.push(a); this.cumHome.push(b); }
+    // beats: chaos events + changes seen by the AWS watcher
+    const beats = this.d.events.map((e) => ({ t: e.t, cls: "kill", text: (EVENT_TEXT[e.action] || ((x) => x.action))(e) }));
+    const w = this.d.watch;
+    if (w.length) {
+      const key = w.some((r) => r.tg_healthy != null) ? "tg_healthy" : "ec2_running";
+      const label = key === "tg_healthy" ? "Healthy instances behind the load balancer" : "Running instances";
+      let prev = w[0][key], prevD = w[0].asg_desired, prevP = w[0].probe_ok;
+      for (const r of w) {
+        if (r[key] != null && prev != null && r[key] !== prev) beats.push({ t: r.t, cls: r[key] > prev ? "heal" : "kill", text: `${label}: ${prev} → ${r[key]}` });
+        if (r.asg_desired != null && prevD != null && r.asg_desired !== prevD) beats.push({ t: r.t, cls: "heal", text: `Auto Scaling Group desired capacity: ${prevD} → ${r.asg_desired}` });
+        if (r.probe_ok != null && prevP != null && r.probe_ok !== prevP) beats.push({ t: r.t, cls: r.probe_ok ? "heal" : "kill", text: r.probe_ok ? "Health probe on the client's address: OK" : "Health probe on the client's address: no answer" });
+        if (r[key] != null) prev = r[key]; if (r.asg_desired != null) prevD = r.asg_desired; if (r.probe_ok != null) prevP = r.probe_ok;
+      }
+    }
+    (this.spec.beats || []).forEach((b) => beats.push(b));
+    this.beats = beats.sort((x, y) => x.t - y.t);
+    this.instMax = Math.max(2, ...w.map((r) => Math.max(r.asg_desired || 0, r.tg_healthy || 0, r.ec2_running || 0))) + 1;
+    this.rpsMax = Math.max(10, ...s.rps) * 1.1;
+  }
+  get duration() { return this.d ? this.d.duration : 0; }
+  draw(cursor) {
+    if (!this.d) return;
+    const cv = this.canvas, dpr = window.devicePixelRatio || 1;
+    const W = cv.clientWidth || 600;
+    const lanes = this.spec.lanes.filter((l) => l !== "inst" || this.d.watch.length);
+    const laneH = { avail: 120, p95: 80, rps: 80, inst: 80 };
+    const gap = 26, top = 18, left = 52, right = 10;
+    const H = top + lanes.reduce((a, l) => a + laneH[l] + gap, 0) + 4;
+    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + "px"; }
+    const g = cv.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    g.font = "11px Segoe UI, system-ui, sans-serif";
+    const s = this.d.series, n = s.t.length, dur = this.d.duration, pw = W - left - right;
+    const X = (t) => left + (t / dur) * pw;
+    const ci = Math.min(n - 1, Math.floor(cursor));
+    const bw = Math.max(pw / dur, 1);
+    let y = top;
+    const laneTop = {};
+    for (const lane of lanes) {
+      const h = laneH[lane]; laneTop[lane] = y;
+      g.fillStyle = COLORS.text;
+      g.fillText({ avail: "Home page OK %", p95: "p95 latency (ms, log)", rps: "Requests / second", inst: this.d.watch.some((r) => r.tg_healthy != null) ? "Instances (ASG)" : "Instance" }[lane], left, y - 5);
+      g.strokeStyle = COLORS.grid; g.lineWidth = 1; g.strokeRect(left + .5, y + .5, pw - 1, h - 1);
+      if (lane === "avail") {
+        for (let i = 0; i <= ci; i++) {
+          const x = X(s.t[i]), a = this.av[i], f = this.fbf[i];
+          g.fillStyle = COLORS.bad; g.fillRect(x, y, bw, h * (1 - a));
+          g.fillStyle = COLORS.fb; g.fillRect(x, y + h * (1 - a), bw, h * f);
+          g.fillStyle = COLORS.ok; g.fillRect(x, y + h * (1 - a) + h * f, bw, h * Math.max(0, a - f));
+        }
+        g.fillStyle = COLORS.text; g.fillText("100", left - 26, y + 9); g.fillText("0", left - 12, y + h);
+        g.strokeStyle = "rgba(255,255,255,.35)"; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(left, y + h * .01); g.lineTo(left + pw, y + h * .01); g.stroke(); g.setLineDash([]);
+      } else if (lane === "p95") {
+        const lo = Math.log10(5), hi = Math.log10(3000), Y = (v) => y + h - ((Math.log10(Math.max(5, Math.min(3000, v))) - lo) / (hi - lo)) * h;
+        [10, 100, 1000].forEach((v) => { g.fillStyle = COLORS.text; g.fillText(v >= 1000 ? "1 s" : v, left - 30, Y(v) + 4); g.strokeStyle = COLORS.grid; g.beginPath(); g.moveTo(left, Y(v)); g.lineTo(left + pw, Y(v)); g.stroke(); });
+        g.strokeStyle = COLORS.violet; g.lineWidth = 1.5; g.beginPath(); let started = false;
+        for (let i = 0; i <= ci; i++) { const v = s.p95[i]; if (v == null) { started = false; continue; } const px = X(s.t[i]) + bw / 2, py = Y(v); if (!started) { g.moveTo(px, py); started = true; } else g.lineTo(px, py); }
+        g.stroke(); g.lineWidth = 1;
+      } else if (lane === "rps") {
+        const Y = (v) => y + h - (v / this.rpsMax) * h;
+        g.fillStyle = COLORS.text; g.fillText(Math.round(this.rpsMax), left - 34, y + 10); g.fillText("0", left - 12, y + h);
+        g.fillStyle = "rgba(91,140,255,.55)";
+        for (let i = 0; i <= ci; i++) { const v = s.rps[i]; g.fillRect(X(s.t[i]), Y(v), bw, y + h - Y(v)); }
+      } else if (lane === "inst") {
+        const w = this.d.watch, Y = (v) => y + h - (v / this.instMax) * h;
+        for (let v = 1; v < this.instMax; v++) { g.fillStyle = COLORS.text; g.fillText(v, left - 14, Y(v) + 4); g.strokeStyle = COLORS.grid; g.beginPath(); g.moveTo(left, Y(v)); g.lineTo(left + pw, Y(v)); g.stroke(); }
+        const step = (key, color, dash) => {
+          g.strokeStyle = color; g.lineWidth = 2; g.setLineDash(dash || []); g.beginPath(); let prevY = null;
+          for (const r of w) { if (r.t > cursor || r[key] == null) continue; const px = Math.max(left, X(r.t)), py = Y(r[key]); if (prevY == null) g.moveTo(px, py); else { g.lineTo(px, prevY); g.lineTo(px, py); } prevY = py; }
+          if (prevY != null) g.lineTo(X(Math.min(cursor, dur)), prevY);
+          g.stroke(); g.setLineDash([]); g.lineWidth = 1;
+        };
+        if (w.some((r) => r.asg_desired != null)) { step("asg_desired", COLORS.accent, [5, 4]); step("tg_healthy", COLORS.ok); }
+        else { step("ec2_running", COLORS.ok); step("probe_ok", COLORS.accent, [5, 4]); }
+      }
+      y += h + gap;
+    }
+    // chaos events across all lanes
+    for (const e of this.d.events) {
+      const x = X(e.t), passed = e.t <= cursor;
+      g.strokeStyle = passed ? COLORS.ev : "rgba(239,77,77,.3)"; g.lineWidth = passed ? 2 : 1;
+      g.beginPath(); g.moveTo(x, top - 2); g.lineTo(x, y - gap); g.stroke(); g.lineWidth = 1;
+      g.fillStyle = passed ? "#ffb4b4" : "rgba(255,180,180,.45)"; g.fillText(EVENT_SHORT[e.action] || e.action, x + 3, top + 10);
+    }
+    // cursor
+    const cx = X(Math.min(cursor, dur));
+    g.strokeStyle = "rgba(255,255,255,.85)"; g.beginPath(); g.moveTo(cx, top - 4); g.lineTo(cx, y - gap + 2); g.stroke();
+    // legend line for instance lane
+    if (laneTop.inst != null) {
+      const ly = laneTop.inst + laneH.inst + 16; g.fillStyle = COLORS.text;
+      const asg = this.d.watch.some((r) => r.asg_desired != null);
+      g.fillText(asg ? "— healthy targets (green)   - - desired capacity (blue)" : "— instance running (green)   - - health probe OK (blue)", left, ly);
+    }
+    this.kpis(cursor, ci);
+  }
+  kpis(cursor, ci) {
+    const s = this.d.series;
+    const cum = this.cumHome[ci] ? (100 * this.cumOk[ci] / this.cumHome[ci]) : 100;
+    let instTxt = "-";
+    const w = this.d.watch.filter((r) => r.t <= cursor);
+    if (w.length) { const r = w[w.length - 1]; instTxt = r.tg_healthy != null ? `${r.tg_healthy} / ${r.asg_desired}` : (r.ec2_running ?? "-"); }
+    const p95 = s.p95[ci];
+    const cls = cum >= 99 ? "ok" : cum >= 90 ? "warn" : "bad";
+    const now = this.av[ci] * 100;
+    const k = [
+      ["Availability so far", `<span class="${cls}">${cum.toFixed(2)}%</span>`],
+      ["This second", `<span class="${now >= 99 ? "ok" : now >= 50 ? "warn" : "bad"}">${now.toFixed(0)}%</span>${this.fbf[ci] > .01 ? ` <span class="warn small">${(this.fbf[ci] * 100).toFixed(0)}% fallback</span>` : ""}`],
+      [this.d.watch.length ? (this.d.watch.some((r) => r.tg_healthy != null) ? "Healthy / desired" : "Instance running") : "Requests / s", this.d.watch.length ? instTxt : s.rps[ci]],
+      ["p95 latency", p95 == null ? "-" : `${Math.round(p95)} ms`],
+    ];
+    $(".kpis", this.el).innerHTML = k.map(([l, v]) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div></div>`).join("");
+    const passed = this.beats.filter((b) => b.t <= cursor);
+    const tk = $(".ticker", this.el);
+    const html = passed.length ? passed.slice().reverse().map((b) => `<div class="${b.cls || ""}"><b>${fmtT(b.t)}</b>${esc(b.text)}</div>`).join("")
+      : `<div>Steady state. Press play.</div>`;
+    if (tk._last !== html) { tk.innerHTML = html; tk._last = html; }
+  }
+}
+
+class Player {
+  constructor(host, chapterId) {
+    this.host = host; this.chapterId = chapterId; this.replays = []; this.cursor = 0; this.playing = false; this.speed = 20;
+    host.innerHTML = `<div class="controls">
+        <button data-k="play">▶ Play</button><button class="sec" data-k="restart">↺ Restart</button>
+        <select data-k="speed"><option value="5">5×</option><option value="10">10×</option><option value="20" selected>20×</option><option value="40">40×</option><option value="80">80×</option></select>
+        <input type="range" data-k="scrub" min="0" max="600" step="1" value="0"><span class="clock">0:00 / 0:00</span></div>
+      <div class="replays"></div>`;
+    this.box = $(".replays", host);
+    $('[data-k="play"]', host).onclick = () => this.toggle();
+    $('[data-k="restart"]', host).onclick = () => { this.cursor = 0; this.render(); if (!this.playing) this.toggle(); };
+    $('[data-k="speed"]', host).onchange = (e) => (this.speed = +e.target.value);
+    $('[data-k="scrub"]', host).oninput = (e) => { this.cursor = +e.target.value; this.render(); };
+    window.addEventListener("resize", () => this.render());
+  }
+  load(specs) {
+    this.stop(); this.cursor = 0; this.box.innerHTML = "";
+    this.box.className = "replays" + (specs.length > 1 ? " two" : "");
+    this.replays = specs.map((s) => new Replay(this.box, s));
+    Promise.all(this.replays.map((r) => r.ready)).then(() => {
+      this.dur = Math.max(...this.replays.map((r) => r.duration));
+      $('[data-k="scrub"]', this.host).max = this.dur;
+      if (jumpTo != null) { this.cursor = Math.min(jumpTo, this.dur); jumpTo = null; }
+      this.render();
+    });
+  }
+  render() {
+    this.replays.forEach((r) => r.draw(this.cursor));
+    $('[data-k="scrub"]', this.host).value = this.cursor;
+    $(".clock", this.host).textContent = `${fmtT(this.cursor)} / ${fmtT(this.dur || 0)}`;
+  }
+  toggle() {
+    if (this.playing) return this.stop();
+    if (this.cursor >= (this.dur || 0)) this.cursor = 0;
+    this.playing = true; $('[data-k="play"]', this.host).textContent = "❚❚ Pause";
+    let last = performance.now();
+    const tick = (now) => {
+      if (!this.playing) return;
+      this.cursor = Math.min(this.dur, this.cursor + ((now - last) / 1000) * this.speed); last = now;
+      this.render();
+      if (this.cursor >= this.dur) return this.stop();
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  stop() { this.playing = false; const b = $('[data-k="play"]', this.host); if (b) b.textContent = "▶ Play"; }
+  pauseIfHidden() { if (chapters[current].dataset.id !== this.chapterId) this.stop(); else this.render(); }
+}
+
+const PRESETS = {
+  aws: {
+    e1: [
+      { run: "s1/e1/run1", title: "S1 lift-and-shift: stop the only instance", sub: "one EC2, one AZ", lanes: ["avail", "inst"],
+        beats: [{ t: 128, cls: "heal", text: "\"On-call engineer\" restarts the instance (scripted, 60 s after the stop)" },
+                { t: 137, cls: "kill", text: "The VM is running again, but on a NEW public IP (44.203.10.200 → 3.239.110.80). Clients still call the old address, so the outage never ends" }] },
+      { run: "s2/e1/run1", title: "S2 refactor: terminate a random instance ×3", sub: "ALB + ASG across 2 AZs", lanes: ["avail", "inst"] },
+    ],
+    e2: [{ run: "s2/e2/run1", title: "S2: terminate every instance in us-east-1a", sub: "Chaos Gorilla", lanes: ["avail", "p95", "inst"] }],
+  },
+  scale: {
+    s2e5: [{ run: "s2/e5-heavy/run1", title: "S2 heavy ramp: 150 → 450 virtual users", sub: "CPU target 50% → 30% at ~7:20", lanes: ["avail", "rps", "inst"],
+             beats: [{ t: 438, cls: "heal", text: "Scaling target lowered from 50% to 30% CPU (terraform apply -var cpu_target=30)" },
+                     { t: 697, cls: "kill", text: "Replacement refused by the new account's vCPU quota; the ASG retries on its own a minute later" }] }],
+    s0e5: [{ run: "s0/e5/run1", title: "S0 one laptop: ramp 5 → 100 virtual users", sub: "monolith + Postgres", lanes: ["avail", "rps", "p95"] }],
+  },
+  local: {
+    e4: [
+      { run: "local-s2/e4-breaker-on/run1", title: "Breaker ON: recommendations stopped", sub: "run 1 of 3", lanes: ["avail", "p95"] },
+      { run: "local-s2/e4-breaker-off/run1", title: "Breaker OFF: recommendations stopped", sub: "run 1 of 3", lanes: ["avail", "p95"] },
+    ],
+    e3: [
+      { run: "local-s2/e3-breaker-on/run1", title: "Breaker ON: +300 ms on recommendations", lanes: ["avail", "p95", "rps"] },
+      { run: "local-s2/e3-breaker-off/run1", title: "Breaker OFF: +300 ms on recommendations", lanes: ["avail", "p95", "rps"] },
+    ],
+  },
+};
+const players = {};
+function setupReplayChapter(key, chapterId) {
+  const tabs = $(`[data-replay-tabs="${key}"]`);
+  const chapter = tabs.closest("section");
+  const pick = (preset) => {
+    $$("button", tabs).forEach((b) => b.classList.toggle("active", b.dataset.preset === preset));
+    $$("[data-note]", chapter).forEach((n) => (n.hidden = n.dataset.note !== `${key}-${preset}`));
+    players[key].load(PRESETS[key][preset]);
+  };
+  tabs.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) pick(b.dataset.preset); });
+  onOpen[chapterId] = () => {
+    if (!players[key]) { players[key] = new Player($(`[data-replay-host="${key}"]`), chapterId); pick($("button.active", tabs).dataset.preset); }
+  };
+}
+setupReplayChapter("aws", "aws");
+setupReplayChapter("scale", "scale");
+setupReplayChapter("local", "local");
+const scaleOpen = onOpen.scale;
+onOpen.scale = () => { scaleOpen(); if (!onOpen.scale._log) { onOpen.scale._log = 1; getText("/files/results/aws-logs/s2-e5-asg-activities.txt").then((t) => ($("#asgLog").textContent = t)).catch(() => ($("#asgLog").textContent = "not found")); } };
+
+// ------------------------------------------------------------------ live app + breaker
+const API = [
+  ["GET", "/health", "Health check (pings the database); the ALB uses it"],
+  ["GET", "/?user=user5", "Home page: trending + personal recommendations"],
+  ["GET", "/movies?page=1", "First 20 movies"],
+  ["GET", "/movies?genre=Sci-Fi", "Filter by genre"],
+  ["GET", "/movies/7", "One movie"],
+  ["GET", "/movies/99999", "Missing movie → 404"],
+  ["GET", "/recommendations/user5", "Recommendations service directly"],
+  ["POST", "/login", "Login user5 / password → signed token", '{"username":"user5","password":"password"}'],
+  ["POST", "/login", "Wrong password → 401", '{"username":"user5","password":"nope"}'],
+];
+$("#apiCalls").innerHTML = API.map(([m, p, d], i) => `<button data-i="${i}">${m} ${esc(p)}<span>${esc(d)}</span></button>`).join("");
+$("#apiCalls").addEventListener("click", async (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const [method, path, , body] = API[+b.dataset.i];
+  $("#apiHead").innerHTML = `<span class="muted">Calling ${method} ${esc(path)} ...</span>`;
+  const r = await getJSON("/api/call", { method: "POST", body: JSON.stringify({ method, path, body }) });
+  const cls = r.status >= 200 && r.status < 300 ? "ok" : "bad";
+  $("#apiHead").innerHTML = `<span class="pill ${cls}">HTTP ${r.status || "no answer"}</span><span class="muted">${r.ms} ms</span>` +
+    (r.served_by ? `<span>X-Served-By: <code>${esc(r.served_by)}</code></span>` : "") +
+    (r.recs_source ? `<span>X-Recs-Source: <code>${esc(r.recs_source)}</code></span>` : "");
+  $("#apiBody").textContent = r.error ? r.error : (typeof r.body === "string" ? r.body : JSON.stringify(r.body, null, 2));
+});
+onOpen.breaker = () => { if (!$("#breakerHolder iframe")) $("#breakerHolder").innerHTML = '<iframe class="breaker" src="/breaker" title="Circuit breaker demo"></iframe>'; };
+
+// ------------------------------------------------------------------ results table
+onOpen.results = async () => {
+  if (onOpen.results._done) return; onOpen.results._done = 1;
+  const rows = await getJSON("/api/summaries");
+  const groups = {};
+  rows.forEach((r) => (groups[r.stage + "|" + r.exp] ||= []).push(r));
+  const med = (a) => { a = a.filter((v) => v != null).sort((x, y) => x - y); if (!a.length) return null; const m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
+  const NAMES = { e0: "E0 steady load", e1: "E1 instance kill", e2: "E2 AZ loss", e3: "E3 +300 ms latency", e4: "E4 recs down", e5: "E5 load ramp" };
+  const order = ["s0", "local-s2", "s1", "s2"];
+  const keys = Object.keys(groups).sort((a, b) => order.indexOf(a.split("|")[0]) - order.indexOf(b.split("|")[0]) || a.localeCompare(b));
+  const f = (v, d = 1) => v == null ? "-" : Number(v).toFixed(d);
+  let html = `<tr><th>Stage</th><th>Experiment</th><th class="num">Runs</th><th class="num">Availability %</th><th class="num">p50 ms</th><th class="num">p95 ms</th><th class="num">req/s</th><th class="num">Longest outage s</th><th class="num">Fallback %</th></tr>`;
+  for (const k of keys) {
+    const g = groups[k], [stage, exp] = k.split("|"), base = exp.split("-")[0], variant = exp.slice(base.length + 1);
+    const av = med(g.map((r) => r.availability_pct));
+    const cls = av >= 99 ? "ok" : av >= 90 ? "warn" : "bad";
+    html += `<tr><td>${esc(stage.toUpperCase())}</td><td>${esc(NAMES[base] || base)}${variant ? ` <span class="muted">(${esc(variant)})</span>` : ""}</td><td class="num">${g.length}</td>
+      <td class="num ${cls}"><b>${f(av, 2)}</b></td><td class="num">${f(med(g.map((r) => r.home_p50_ms)))}</td><td class="num">${f(med(g.map((r) => r.home_p95_ms)))}</td>
+      <td class="num">${f(med(g.map((r) => r.throughput_rps)))}</td><td class="num">${f(med(g.map((r) => r.longest_outage_s)), 0)}</td><td class="num">${f(med(g.map((r) => r.fallback_pct_of_home)))}</td></tr>`;
+  }
+  $("#resultsTable").innerHTML = html;
+};
+
+// ------------------------------------------------------------------ evidence logs
+const LOG_NOTES = {
+  "s2-asg-activities.txt": "AWS's own Auto Scaling history for E1 and E2: every termination by our Chaos Monkey and every replacement the ASG launched, with timestamps and causes. Replacements start within about 2 s of each kill.",
+  "s2-e5-asg-activities.txt": "Scale-out during the heavy ramp: CloudWatch alarm → desired 2 → 3 → 4, the health-check replacement, the vCPU-quota refusal and the successful retry.",
+  "s1-e1-new-ip-check.txt": "Why S1 never recovered for clients: the old public IP is dead, while the same instance answers on its new IP.",
+  "s1-e1-manual-restart.txt": "The scripted 'on-call engineer' restarting the S1 instance 60 s after it was stopped.",
+  "s1-apply.txt": "Terraform creating S1 from code (33 s).",
+  "s2-apply.txt": "Terraform creating S2: ALB, target groups, ASG, launch template, RDS (first attempt; see the retry).",
+  "s2-apply-retry.txt": "The retry after the Auto Scaling service-linked role was not yet usable in the new account.",
+  "s2-cpu-target-30.txt": "Lowering the target-tracking value from 50% to 30% CPU during E5; only the scaling policy changed.",
+  "s2-e5-cpu.txt": "CloudWatch: average CPU of the ASG per minute during E5.",
+  "final-cleanup-check.txt": "After destroy: no instances, volumes, IPs, load balancers, databases or registries left.",
+  "final-cleanup-check-2.txt": "The same clean-up check after the second S2 deployment.",
+  "shared-apply.txt": "The shared stack: ECR repository, IAM instance profile, $5 budget alert.",
+  "build-push.txt": "Building the Docker image and pushing it to ECR.",
+};
+onOpen.evidence = async () => {
+  if (onOpen.evidence._done) return; onOpen.evidence._done = 1;
+  const files = await getJSON("/api/list?dir=results/aws-logs");
+  const first = ["s2-asg-activities.txt", "s2-e5-asg-activities.txt", "s1-e1-new-ip-check.txt", "s1-apply.txt", "s2-apply.txt", "final-cleanup-check.txt"];
+  files.sort((a, b) => (first.indexOf(a) + 1 || 99) - (first.indexOf(b) + 1 || 99) || a.localeCompare(b));
+  $("#logList").innerHTML = files.map((f) => `<button data-f="${esc(f)}">${esc(f)}${LOG_NOTES[f] ? '<span class="sub">key evidence</span>' : ""}</button>`).join("");
+  const open = async (f) => {
+    $$("#logList button").forEach((b) => b.classList.toggle("active", b.dataset.f === f));
+    $("#logExplain").innerHTML = `<b>${esc(f)}</b><br><span class="muted">${esc(LOG_NOTES[f] || "Raw log from the AWS session on 14 Nov 2026.")}</span>`;
+    $("#logBody").textContent = "Loading...";
+    try { let t = await getText("/files/results/aws-logs/" + encodeURIComponent(f)); if (f.endsWith(".json")) { try { t = JSON.stringify(JSON.parse(t), null, 2); } catch (e) {} } $("#logBody").textContent = t; }
+    catch (e) { $("#logBody").textContent = "Could not load."; }
+  };
+  $("#logList").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) open(b.dataset.f); });
+  open(files[0]);
+};
+
+// ------------------------------------------------------------------ code tour
+const CODE = [
+  { f: "app/src/catalogue.py", label: "Circuit breaker + fallback", from: "SERVICE = os.environ", to: "return jsonify(error=\"recommendations unavailable\"",
+    text: ["Monolith: recommendations is an in-process function call.", "Services + BREAKER=on: HTTP call with a 250 ms timeout through <code>pybreaker</code> (opens after 5 failures, resets after 10 s); any failure returns <code>recommendations.popular()</code> with source <i>fallback</i>.", "BREAKER=off: 5 s timeout, no fallback; the error handler turns the failure into HTTP 502 (cascading failure)."] },
+  { f: "app/src/main.py", label: "One image, four roles", from: "BLUEPRINTS = {", to: "return app",
+    text: ["<code>SERVICE</code> picks which Flask blueprints this process serves: monolith, catalogue, recommendations or auth.", "<code>/health</code> pings the database, so the ALB health check means \"this instance can really serve\".", "Every response is tagged <code>X-Served-By: instance/service</code>."] },
+  { f: "app/src/recommendations.py", label: "Fault injection (Latency Monkey)", from: "def _current_fault", to: "return jsonify(_current_fault())",
+    text: ["<code>/admin/fault</code> exists only when <code>FAULTS_ENABLED=1</code> (404 otherwise).", "The setting is stored in a <b>file</b>, not a variable, because Gunicorn runs several worker processes and all of them must see it.", "Each request sleeps <code>latency_ms</code> or returns 500 with probability <code>error_rate</code>."] },
+  { f: "app/src/db.py", label: "Database layer and safe seeding", from: "def init(", to: "def ping",
+    text: ["<code>init()</code> retries for up to a minute, because Postgres or RDS may not be ready yet.", "<code>pg_advisory_xact_lock(457)</code>: several S2 instances boot at once; the lock makes them seed one at a time.", "<code>IF NOT EXISTS</code> + <code>ON CONFLICT DO NOTHING</code> make seeding idempotent. Broken pooled connections are dropped, not reused."] },
+  { f: "chaos/chaos_monkey.py", label: "Mini Chaos Monkey + safety rails", from: "def candidates(", to: "time.sleep(min(rng.uniform",
+    text: ["Only instances tagged <code>project=mini-netflix</code> <b>and</b> <code>stage=s1|s2</code> that are running can be picked.", "Refuses to act if more than <code>--max-instances</code> (4) match: protection against a wrong filter.", "<code>--az</code> kills every instance in one AZ (Chaos Gorilla); <code>--dry-run</code> acts on nothing; every action is logged to <code>events.csv</code>."] },
+  { f: "infra/s2/main.tf", label: "S2: ALB, target groups, ASG", from: "resource \"aws_lb_target_group\" \"svc\"", to: "target_value = var.cpu_target",
+    text: ["Every target group health-checks <b>port 5001</b> (the catalogue), so stopping only recommendations tests the breaker, not the ASG.", "Path rules: <code>/recommendations/*</code> and <code>/login</code>; everything else to the catalogue.", "ASG: min 2 / max 4 across 2 AZs, <code>health_check_type = \"ELB\"</code>, 120 s grace period; target tracking on average CPU."] },
+  { f: "infra/s2/main.tf", label: "S2: security groups and RDS", from: "resource \"aws_security_group\" \"alb\"", to: "apply_immediately",
+    text: ["Layered security groups: internet &rarr; ALB (your IP only) &rarr; app ports 5001–5003 &rarr; DB port 5432.", "RDS Postgres, not public, with a random password generated by Terraform.", "Default VPC public subnets avoid a NAT gateway, which keeps the cost near zero."] },
+  { f: "infra/s2/user_data.sh", label: "S2 instance boot script", from: "set -euxo", to: "SERVICE=auth",
+    text: ["Installs Docker, logs in to ECR, reads the instance ID from metadata (IMDSv2 token).", "Starts the three containers on the host network, so the catalogue reaches recommendations on 127.0.0.1:5002.", "No state on the instance: it can be killed and replaced at any time."] },
+  { f: "infra/s1/main.tf", label: "S1: one EC2 instance", from: "resource \"aws_security_group\" \"s1\"", to: "output \"instance_id\"",
+    text: ["One instance, one subnet (us-east-1a), one public IP.", "Nothing replaces it if it is stopped or terminated, which is exactly what experiment E1 exposes."] },
+  { f: "loadtest/loadgen.py", label: "Load generator", from: "MIX = [", to: "time.sleep(self.rng.expovariate",
+    text: ["Closed-loop virtual users: pick a request (60% home, 25% movie, 10% recommendations, 5% login), send it, think, repeat.", "Every request is written to <code>requests.csv</code> with status, latency, <code>X-Served-By</code> and <code>X-Recs-Source</code>. That is why we wrote our own instead of using k6."] },
+  { f: "loadtest/analyze.py", label: "Definitions of the metrics", from: "Definitions (fixed", to: "time to recover",
+    text: ["Steady state: GET / returns HTTP 200 within 1 s.", "Availability, degraded and outage seconds, and time to recover are defined here and were fixed before testing."] },
+  { f: "chaos/run_experiment.py", label: "One command per experiment", from: "def main():", to: "print(f\"results in",
+    text: ["Starts the AWS watcher, the load generator and the right chaos action (E1–E5), then runs the analysis.", "Results land in <code>results/&lt;stage&gt;/&lt;exp&gt;/run&lt;N&gt;/</code>."] },
+];
+$("#codeList").innerHTML = CODE.map((c, i) => `<button data-i="${i}">${esc(c.label)}<span class="sub">${esc(c.f)}</span></button>`).join("");
+const fileCache = {};
+async function openCode(i) {
+  const c = CODE[i];
+  $$("#codeList button").forEach((b, j) => b.classList.toggle("active", j === i));
+  $("#codeExplain").innerHTML = `<b>${esc(c.label)}</b> <span class="muted small">${esc(c.f)}</span><ul>${c.text.map((t) => `<li>${t}</li>`).join("")}</ul>`;
+  const src = fileCache[c.f] ||= await getText("/files/" + c.f).catch(() => "could not load " + c.f);
+  const lines = src.replace(/\r/g, "").split("\n");
+  const a = Math.max(0, lines.findIndex((l) => l.includes(c.from)));
+  let b = lines.findIndex((l, j) => j >= a && l.includes(c.to)); if (b < 0) b = a;
+  $("#codeBody").innerHTML = lines.map((l, j) => `<span class="ln${j >= a && j <= b ? " hl" : ""}" data-n="${j + 1}">${esc(l) || " "}</span>`).join("");
+  const hl = $("#codeBody .hl"); if (hl) $("#codeBody").scrollTop = hl.offsetTop - 40;
+}
+$("#codeList").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) openCode(+b.dataset.i); });
+onOpen.code = () => { if (!$("#codeList button.active")) openCode(0); };
+
+// ------------------------------------------------------------------ tests
+async function pollTests() {
+  const t = await getJSON("/api/tests");
+  $("#testOut").textContent = t.output || (t.running ? "Starting pytest..." : "Press \"Run pytest\".");
+  $("#testOut").scrollTop = $("#testOut").scrollHeight;
+  $("#runTests").disabled = t.running;
+  $("#testState").innerHTML = t.running ? "running..." : t.code == null ? "" : t.code === 0 ? '<span class="ok">all tests passed</span>' : `<span class="bad">pytest exit code ${t.code}</span>`;
+  if (t.running) setTimeout(pollTests, 700);
+}
+$("#runTests").onclick = async () => { await fetch("/api/tests/run", { method: "POST" }); pollTests(); };
+
+// ------------------------------------------------------------------ start
+// "#aws@600" opens a chapter with its replay already at second 600
+const [hashId, hashAt] = location.hash.slice(1).split("@");
+let jumpTo = hashAt ? +hashAt : null;
+const start = chapters.findIndex((c) => c.dataset.id === hashId);
+show(start >= 0 ? start : 0);
+</script>
+</body>
+</html>
