@@ -1,0 +1,62 @@
+random_password.db: Refreshing state... [id=none]
+random_password.token: Refreshing state... [id=none]
+data.aws_ssm_parameter.al2023: Reading...
+data.aws_vpc.default: Reading...
+data.aws_ssm_parameter.al2023: Read complete after 1s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+data.aws_vpc.default: Read complete after 2s [id=vpc-06a0ddd29d1a7549d]
+data.aws_subnet.az["us-east-1b"]: Reading...
+data.aws_subnet.az["us-east-1a"]: Reading...
+aws_security_group.alb: Refreshing state... [id=sg-05ad1d1d957728bdc]
+aws_lb_target_group.svc["catalogue"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/f5e8bff0cab6eff9]
+aws_lb_target_group.svc["auth"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/d9c6add34a3ae4d1]
+aws_lb_target_group.svc["recommendations"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/ae7ddaf4de0d45c6]
+data.aws_subnet.az["us-east-1b"]: Read complete after 1s [id=subnet-0a9e38970aeff7cec]
+data.aws_subnet.az["us-east-1a"]: Read complete after 1s [id=subnet-082d1ab56ac41492f]
+aws_db_subnet_group.db: Refreshing state... [id=mini-netflix-s2]
+aws_security_group.app: Refreshing state... [id=sg-0353c9d2dda7f0e77]
+aws_lb.alb: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/a3f54aebd2b7289c]
+aws_security_group.db: Refreshing state... [id=sg-006deccac9cf479d1]
+aws_lb_listener.http: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b]
+aws_db_instance.db: Refreshing state... [id=db-65XFEETQTSHQHFVPBSWPAANBFU]
+aws_launch_template.app: Refreshing state... [id=lt-0dcba797fc51de20c]
+aws_lb_listener_rule.auth: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b/09bccaf3652ea22f]
+aws_lb_listener_rule.recommendations: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b/20f201987db489de]
+aws_autoscaling_group.app: Refreshing state... [id=mini-netflix-s2]
+aws_autoscaling_policy.cpu: Refreshing state... [id=cpu-target]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_policy.cpu will be updated in-place
+  ~ resource "aws_autoscaling_policy" "cpu" {
+        id                        = "cpu-target"
+        name                      = "cpu-target"
+        # (10 unchanged attributes hidden)
+
+      ~ target_tracking_configuration {
+          ~ target_value     = 50 -> 30
+            # (1 unchanged attribute hidden)
+
+            # (1 unchanged block hidden)
+        }
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+aws_autoscaling_policy.cpu: Modifying... [id=cpu-target]
+aws_autoscaling_policy.cpu: Modifications complete after 2s [id=cpu-target]
+
+Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+
+Outputs:
+
+asg_name = "mini-netflix-s2"
+azs = [
+  "us-east-1a",
+  "us-east-1b",
+]
+catalogue_target_group = "mini-netflix-catalogue"
+fis_templates = tomap({})
+url = "http://mini-netflix-s2-1485409940.us-east-1.elb.amazonaws.com"

@@ -1,0 +1,4 @@
+ts,action,target,az,stage,dry_run,note
+1794680396.228,terminate,i-0e7a1bd3b981046d0,us-east-1a,s2,False,
+1794680577.609,terminate,i-06db73ebdd23033ed,us-east-1b,s2,False,
+1794680754.168,terminate,i-08f2c055a705b703f,us-east-1b,s2,False,

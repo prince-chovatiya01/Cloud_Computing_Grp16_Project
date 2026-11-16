@@ -1,0 +1,7 @@
+2026-11-14T19:41:16.075000+00:00	WaitingForInstanceWarmup	Launching a new EC2 instance: i-09a5c005a6beb0f3e
+2026-11-14T19:40:18.144000+00:00	Failed	Launching a new EC2 instance.  Status Reason: You have requested more vCPU capacity than your curren
+2026-11-14T19:40:16.784000+00:00	Successful	Terminating EC2 instance: i-0670e0b4e0653356d
+2026-11-14T19:38:14.537000+00:00	Successful	Launching a new EC2 instance: i-0cfecae9a230a8da6
+2026-11-14T19:37:17.162000+00:00	Successful	Launching a new EC2 instance: i-0dc29460d2f297a61
+2026-11-14T19:18:21.950000+00:00	Successful	Launching a new EC2 instance: i-0a42b07638905cd0a
+2026-11-14T19:18:21.721000+00:00	Successful	Launching a new EC2 instance: i-0670e0b4e0653356d

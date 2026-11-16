@@ -1,0 +1,16 @@
+== Checked 2026-11-15 00:14 in us-east-1
+-- EC2 instances (not terminated):
+-- EBS volumes:
+-- Elastic IPs:
+-- Load balancers:
+-- Target groups:
+-- Auto Scaling groups:
+-- RDS databases:
+-- RDS snapshots (manual):
+-- ECR repositories:
+-- NAT gateways:
+-- Security groups (non-default):
+-- Budgets:
+None
+-- CloudWatch log groups:
+-- Running instances in ap-south-1 (your old default region):

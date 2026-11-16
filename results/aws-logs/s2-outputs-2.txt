@@ -1,0 +1,8 @@
+asg_name = "mini-netflix-s2"
+azs = [
+  "us-east-1a",
+  "us-east-1b",
+]
+catalogue_target_group = "mini-netflix-catalogue"
+fis_templates = tomap({})
+url = "http://mini-netflix-s2-1485409940.us-east-1.elb.amazonaws.com"

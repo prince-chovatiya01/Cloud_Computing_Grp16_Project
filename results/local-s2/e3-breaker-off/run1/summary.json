@@ -1,0 +1,44 @@
+{
+  "label": "LOCAL-S2 E3 breaker-off run 1",
+  "run_dir": "D:\\IT457\\Project\\results\\local-s2\\e3-breaker-off\\run1",
+  "duration_s": 300.0,
+  "requests_total": 20143,
+  "throughput_rps": 67.1,
+  "home_requests": 12088,
+  "availability_pct": 99.09,
+  "slo_met": true,
+  "error_rate_all_pct": 0.0,
+  "status_counts": {
+    "200": 20143
+  },
+  "home_p50_ms": 10.9,
+  "home_p95_ms": 803.2,
+  "home_p99_ms": 991.0,
+  "degraded_seconds": 43,
+  "outage_seconds": 1,
+  "longest_outage_s": 1,
+  "fallback_pct_of_home": 0.0,
+  "events": [
+    {
+      "t": 61.4,
+      "action": "latency",
+      "target": "local",
+      "time_to_recover_s": 51.63800001144409,
+      "degraded_seconds": 43,
+      "time_to_detect_s": null,
+      "time_to_restore_capacity_s": null
+    },
+    {
+      "t": 183.4,
+      "action": "clear",
+      "target": "local",
+      "time_to_recover_s": 0.0,
+      "degraded_seconds": 0,
+      "time_to_detect_s": null,
+      "time_to_restore_capacity_s": null
+    }
+  ],
+  "mean_time_to_recover_s": 25.8,
+  "unrecovered_events": 0,
+  "mean_time_to_restore_capacity_s": null
+}

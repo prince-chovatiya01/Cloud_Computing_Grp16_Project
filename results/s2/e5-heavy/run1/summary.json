@@ -1,0 +1,27 @@
+{
+  "label": "S2 E5 heavy ramp 150-450 VUs run 1",
+  "run_dir": "results\\s2\\e5-heavy\\run1",
+  "duration_s": 722.2,
+  "requests_total": 222831,
+  "throughput_rps": 308.5,
+  "home_requests": 134015,
+  "availability_pct": 67.366,
+  "slo_met": false,
+  "error_rate_all_pct": 10.96,
+  "status_counts": {
+    "200": 198408,
+    "0": 24421,
+    "502": 2
+  },
+  "home_p50_ms": 486.4,
+  "home_p95_ms": 1725.1,
+  "home_p99_ms": 1975.8,
+  "degraded_seconds": 569,
+  "outage_seconds": 174,
+  "longest_outage_s": 9,
+  "fallback_pct_of_home": 0.17,
+  "events": [],
+  "mean_time_to_recover_s": null,
+  "unrecovered_events": 0,
+  "mean_time_to_restore_capacity_s": null
+}

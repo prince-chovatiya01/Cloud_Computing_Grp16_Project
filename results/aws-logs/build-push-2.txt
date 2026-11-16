@@ -1,0 +1,152 @@
+Login Succeeded
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 355B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 1.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 63B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 650B done
+#4 DONE 0.0s
+
+#5 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#5 resolve docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b 0.0s done
+#5 DONE 0.1s
+
+#6 [2/5] WORKDIR /srv
+#6 CACHED
+
+#7 [3/5] COPY requirements.txt .
+#7 CACHED
+
+#8 [4/5] RUN pip install --no-cache-dir -r requirements.txt
+#8 CACHED
+
+#9 [5/5] COPY src ./src
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 exporting manifest sha256:560a62fb5df6e436dda516ec3dd412275ee53771807b1b5ef547b0f4a5046ba4 done
+#10 exporting config sha256:632204e58b54b23bd9961519a63c236a4fe20efaa0ae0d0c0532436b1634991e done
+#10 exporting attestation manifest sha256:28e76569f5176be527bbcfdce99de2c01f96138c014a9eb8747c9b1a1eb85dce 0.0s done
+#10 exporting manifest list sha256:e195802c470077b346bec1a37d9edf934c5da16225babe7868a9d3525e0fecee
+#10 exporting manifest list sha256:e195802c470077b346bec1a37d9edf934c5da16225babe7868a9d3525e0fecee 0.0s done
+#10 naming to 238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix:latest done
+#10 unpacking to 238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix:latest 0.0s done
+#10 DONE 0.2s
+
+ [33m1 warning found (use docker --debug to expand):
+[0m - JSONArgsRecommended: JSON arguments recommended for CMD to prevent unintended behavior related to OS signals (line 8)
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/wisoentt39y6621pl95pwhw69
+The push refers to repository [238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix]
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+5ac727b13647: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+44136fa355b3: Waiting
+68bced9e0afa: Waiting
+37fb86c2a767: Waiting
+5ac727b13647: Waiting
+5ac727b13647: Pushed
+44136fa355b3: Pushed
+2dc99d2d0a39: Waiting
+05e0eee5572e: Waiting
+4f4fb700ef54: Waiting
+4f4fb700ef54: Waiting
+2dc99d2d0a39: Waiting
+05e0eee5572e: Waiting
+2dc99d2d0a39: Waiting
+05e0eee5572e: Waiting
+4f4fb700ef54: Waiting
+2dc99d2d0a39: Waiting
+05e0eee5572e: Waiting
+4f4fb700ef54: Waiting
+05e0eee5572e: Waiting
+4f4fb700ef54: Waiting
+65872b710f74: Waiting
+f3280aa16a9f: Waiting
+05e0eee5572e: Pushed
+4f4fb700ef54: Pushed
+65872b710f74: Waiting
+f3280aa16a9f: Waiting
+f3280aa16a9f: Waiting
+65872b710f74: Waiting
+65872b710f74: Waiting
+f3280aa16a9f: Waiting
+f3280aa16a9f: Waiting
+65872b710f74: Waiting
+65872b710f74: Waiting
+f3280aa16a9f: Waiting
+68bced9e0afa: Pushed
+c12c7adf4107: Waiting
+65872b710f74: Waiting
+f3280aa16a9f: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+65872b710f74: Pushed
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Waiting
+c12c7adf4107: Pushed
+37fb86c2a767: Pushed
+f3280aa16a9f: Pushed
+2dc99d2d0a39: Pushed
+latest: digest: sha256:e195802c470077b346bec1a37d9edf934c5da16225babe7868a9d3525e0fecee size: 856
+pushed 238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix:latest

@@ -1,0 +1,11 @@
+{
+  "title": "Scale-out worked; our laptop hit its limit first",
+  "notes": "Standard ramp (5 to 55 users): 99.99% availability, CPU at most 11%, so no scale-out was needed. Heavy ramp (150 to 450 users) with the CPU target lowered from 50% to 30% during the run: the Auto Scaling Group went 2 to 3 at 19:37:06 and 3 to 4 at 19:38:06 with no human action, and throughput rose from about 305 to 370 req/s while CPU per instance fell. But the load generator on one laptop saturated at about 300 req/s: almost all errors are client-side timeouts, so the p95 under 500 ms criterion cannot be judged fairly. At peak, one overloaded instance failed its health check; its first replacement was refused by the new account's vCPU quota and succeeded on retry a minute later.",
+  "image": "results/s2/e5-heavy/run1/timeline.png",
+  "stats": [
+    ["2 → 4", "instances, added automatically within 2 min of the alarm", "teal"],
+    ["305 → 370", "req/s as the new instances joined; CPU per instance fell", "navy"],
+    ["≈ 300 req/s", "where our single laptop load generator saturated", "amber"]
+  ],
+  "footnote": "Verdict H4: partly tested. Scale-out works; the latency criterion was masked by the client bottleneck. CPU target lowered 50% → 30% for this run."
+}

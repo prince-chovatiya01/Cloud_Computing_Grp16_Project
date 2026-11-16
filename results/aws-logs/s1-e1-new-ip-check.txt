@@ -1,0 +1,4 @@
+old URL: http://44.203.10.200 (dead after stop)
+old: 000
+new 3.239.110.80 at 23:51:29: {"status":"ok","service":"monolith","instance":"i-00ad93dd6be5f95b1"}
+

@@ -1,0 +1,175 @@
+aws_ecr_repository.app: Refreshing state... [id=mini-netflix]
+aws_iam_role.instance[0]: Refreshing state... [id=mini-netflix-instance]
+aws_budgets_budget.cap[0]: Refreshing state... [id=238913834711:mini-netflix-5usd]
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]: Refreshing state... [id=mini-netflix-instance-20261114191130325400000001]
+aws_iam_instance_profile.instance[0]: Refreshing state... [id=mini-netflix-instance]
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"]: Refreshing state... [id=mini-netflix-instance-20261114191130585900000002]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_budgets_budget.cap[0] will be destroyed
+  - resource "aws_budgets_budget" "cap" {
+      - account_id        = "238913834711" -> null
+      - arn               = "arn:aws:budgets::238913834711:budget/mini-netflix-5usd" -> null
+      - budget_type       = "COST" -> null
+      - id                = "238913834711:mini-netflix-5usd" -> null
+      - limit_amount      = "5.0" -> null
+      - limit_unit        = "USD" -> null
+      - name              = "mini-netflix-5usd" -> null
+      - tags              = {} -> null
+      - tags_all          = {
+          - "project" = "mini-netflix"
+        } -> null
+      - time_period_end   = "2087-06-15_00:00" -> null
+      - time_period_start = "2026-11-01_00:00" -> null
+      - time_unit         = "MONTHLY" -> null
+        # (1 unchanged attribute hidden)
+
+      - cost_types {
+          - include_credit             = true -> null
+          - include_discount           = true -> null
+          - include_other_subscription = true -> null
+          - include_recurring          = true -> null
+          - include_refund             = true -> null
+          - include_subscription       = true -> null
+          - include_support            = true -> null
+          - include_tax                = true -> null
+          - include_upfront            = true -> null
+          - use_amortized              = false -> null
+          - use_blended                = false -> null
+        }
+
+      - notification {
+          - comparison_operator        = "GREATER_THAN" -> null
+          - notification_type          = "ACTUAL" -> null
+          - subscriber_email_addresses = [
+              - "202301084@dau.ac.in",
+            ] -> null
+          - subscriber_sns_topic_arns  = [] -> null
+          - threshold                  = 80 -> null
+          - threshold_type             = "PERCENTAGE" -> null
+        }
+      - notification {
+          - comparison_operator        = "GREATER_THAN" -> null
+          - notification_type          = "FORECASTED" -> null
+          - subscriber_email_addresses = [
+              - "202301084@dau.ac.in",
+            ] -> null
+          - subscriber_sns_topic_arns  = [] -> null
+          - threshold                  = 100 -> null
+          - threshold_type             = "PERCENTAGE" -> null
+        }
+    }
+
+  # aws_ecr_repository.app will be destroyed
+  - resource "aws_ecr_repository" "app" {
+      - arn                  = "arn:aws:ecr:us-east-1:238913834711:repository/mini-netflix" -> null
+      - force_delete         = true -> null
+      - id                   = "mini-netflix" -> null
+      - image_tag_mutability = "MUTABLE" -> null
+      - name                 = "mini-netflix" -> null
+      - registry_id          = "238913834711" -> null
+      - repository_url       = "238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix" -> null
+      - tags                 = {} -> null
+      - tags_all             = {
+          - "project" = "mini-netflix"
+        } -> null
+
+      - encryption_configuration {
+          - encryption_type = "AES256" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - image_scanning_configuration {
+          - scan_on_push = false -> null
+        }
+    }
+
+  # aws_iam_instance_profile.instance[0] will be destroyed
+  - resource "aws_iam_instance_profile" "instance" {
+      - arn         = "arn:aws:iam::238913834711:instance-profile/mini-netflix-instance" -> null
+      - create_date = "2026-11-14T19:12:01Z" -> null
+      - id          = "mini-netflix-instance" -> null
+      - name        = "mini-netflix-instance" -> null
+      - path        = "/" -> null
+      - role        = "mini-netflix-instance" -> null
+      - tags        = {} -> null
+      - tags_all    = {
+          - "project" = "mini-netflix"
+        } -> null
+      - unique_id   = "AIPATPIC7Z3LVJYKW6DFC" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_iam_role.instance[0] will be destroyed
+  - resource "aws_iam_role" "instance" {
+      - arn                   = "arn:aws:iam::238913834711:role/mini-netflix-instance" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "ec2.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-11-14T19:12:00Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "mini-netflix-instance" -> null
+      - managed_policy_arns   = [
+          - "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+          - "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+        ] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "mini-netflix-instance" -> null
+      - path                  = "/" -> null
+      - tags                  = {} -> null
+      - tags_all              = {
+          - "project" = "mini-netflix"
+        } -> null
+      - unique_id             = "AROATPIC7Z3LY6LFRQACT" -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"] will be destroyed
+  - resource "aws_iam_role_policy_attachment" "instance" {
+      - id         = "mini-netflix-instance-20261114191130585900000002" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly" -> null
+      - role       = "mini-netflix-instance" -> null
+    }
+
+  # aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"] will be destroyed
+  - resource "aws_iam_role_policy_attachment" "instance" {
+      - id         = "mini-netflix-instance-20261114191130325400000001" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" -> null
+      - role       = "mini-netflix-instance" -> null
+    }
+
+Plan: 0 to add, 0 to change, 6 to destroy.
+
+Changes to Outputs:
+  - ecr_repository_url    = "238913834711.dkr.ecr.us-east-1.amazonaws.com/mini-netflix" -> null
+  - instance_profile_name = "mini-netflix-instance" -> null
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"]: Destroying... [id=mini-netflix-instance-20261114191130585900000002]
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]: Destroying... [id=mini-netflix-instance-20261114191130325400000001]
+aws_iam_instance_profile.instance[0]: Destroying... [id=mini-netflix-instance]
+aws_ecr_repository.app: Destroying... [id=mini-netflix]
+aws_budgets_budget.cap[0]: Destroying... [id=238913834711:mini-netflix-5usd]
+aws_budgets_budget.cap[0]: Destruction complete after 1s
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]: Destruction complete after 2s
+aws_iam_role_policy_attachment.instance["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"]: Destruction complete after 2s
+aws_ecr_repository.app: Destruction complete after 2s
+aws_iam_instance_profile.instance[0]: Destruction complete after 2s
+aws_iam_role.instance[0]: Destroying... [id=mini-netflix-instance]
+aws_iam_role.instance[0]: Destruction complete after 1s
+
+Destroy complete! Resources: 6 destroyed.

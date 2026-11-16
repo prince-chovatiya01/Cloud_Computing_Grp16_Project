@@ -1,0 +1,75 @@
+loadgen: http://mini-netflix-s2-1233323729.us-east-1.elb.amazonaws.com vus=20 duration=600s -> D:\IT457\Project\results\s2\e2\run1\requests.csv
+chaos_monkey: stage=s2 action=terminate az=us-east-1a dry_run=False
+  t=   10s active_vus=20 queued=0
+  t=   20s active_vus=20 queued=0
+  t=   30s active_vus=20 queued=0
+  t=   40s active_vus=20 queued=0
+  t=   50s active_vus=20 queued=0
+  t=   60s active_vus=20 queued=0
+[00:00:27] {'action': 'az-terminate', 'target': 'i-0ec15e90ae05ecb08', 'az': 'us-east-1a', 'stage': 's2', 'dry_run': False, 'note': ''}
+  t=   70s active_vus=20 queued=0
+  t=   80s active_vus=20 queued=0
+  t=   90s active_vus=20 queued=0
+  t=  100s active_vus=20 queued=0
+  t=  110s active_vus=20 queued=0
+  t=  120s active_vus=20 queued=0
+  t=  130s active_vus=20 queued=0
+  t=  140s active_vus=20 queued=0
+  t=  150s active_vus=20 queued=0
+  t=  160s active_vus=20 queued=0
+  t=  170s active_vus=20 queued=0
+  t=  180s active_vus=20 queued=0
+  t=  190s active_vus=20 queued=0
+  t=  200s active_vus=20 queued=0
+  t=  210s active_vus=20 queued=0
+  t=  220s active_vus=20 queued=0
+  t=  230s active_vus=20 queued=0
+  t=  240s active_vus=20 queued=0
+  t=  250s active_vus=20 queued=0
+  t=  260s active_vus=20 queued=0
+  t=  270s active_vus=20 queued=0
+  t=  280s active_vus=20 queued=0
+  t=  290s active_vus=20 queued=0
+  t=  300s active_vus=20 queued=0
+  t=  310s active_vus=20 queued=0
+  t=  320s active_vus=20 queued=0
+  t=  330s active_vus=20 queued=0
+  t=  340s active_vus=20 queued=0
+  t=  350s active_vus=20 queued=0
+  t=  360s active_vus=20 queued=0
+  t=  370s active_vus=20 queued=0
+  t=  380s active_vus=20 queued=0
+  t=  390s active_vus=20 queued=0
+  t=  400s active_vus=20 queued=0
+  t=  410s active_vus=20 queued=0
+  t=  420s active_vus=20 queued=0
+  t=  430s active_vus=20 queued=0
+  t=  440s active_vus=20 queued=0
+  t=  450s active_vus=20 queued=0
+  t=  460s active_vus=20 queued=0
+  t=  470s active_vus=20 queued=0
+  t=  480s active_vus=20 queued=0
+  t=  490s active_vus=20 queued=0
+  t=  500s active_vus=20 queued=0
+  t=  510s active_vus=20 queued=0
+  t=  520s active_vus=20 queued=0
+  t=  530s active_vus=20 queued=0
+  t=  540s active_vus=20 queued=0
+  t=  550s active_vus=20 queued=0
+  t=  560s active_vus=20 queued=0
+  t=  570s active_vus=20 queued=0
+  t=  580s active_vus=20 queued=0
+  t=  590s active_vus=20 queued=0
+  t=  600s active_vus=20 queued=0
+{
+  "label": "S2 E2 run 1",
+  "availability_pct": 99.472,
+  "slo_met": true,
+  "home_p50_ms": 211.7,
+  "home_p95_ms": 231.2,
+  "throughput_rps": 46.9,
+  "longest_outage_s": 4,
+  "mean_time_to_recover_s": 0.0,
+  "mean_time_to_restore_capacity_s": 142.6
+}
+results in D:\IT457\Project\results\s2\e2\run1

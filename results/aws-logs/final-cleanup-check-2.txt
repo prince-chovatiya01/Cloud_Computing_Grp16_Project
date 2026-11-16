@@ -1,0 +1,19 @@
+== Checked 2026-11-15 01:15 in us-east-1 (after E5 session)
+-- EC2 instances (not terminated):
+-- EBS volumes:
+-- Elastic IPs:
+-- Load balancers:
+-- Target groups:
+-- Auto Scaling groups:
+-- Launch templates:
+-- RDS databases:
+-- RDS snapshots (manual):
+-- RDS subnet groups:
+-- ECR repositories:
+-- Security groups (non-default):
+-- CloudWatch alarms:
+-- IAM role mini-netflix-instance:
+NoSuchEntity
+mini-netflix-instance
+-- Budgets:
+None

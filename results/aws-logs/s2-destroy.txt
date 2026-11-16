@@ -1,0 +1,842 @@
+random_password.db: Refreshing state... [id=none]
+random_password.token: Refreshing state... [id=none]
+data.aws_vpc.default: Reading...
+data.aws_ssm_parameter.al2023: Reading...
+data.aws_ssm_parameter.al2023: Read complete after 1s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+data.aws_vpc.default: Read complete after 2s [id=vpc-06a0ddd29d1a7549d]
+data.aws_subnet.az["us-east-1b"]: Reading...
+data.aws_subnet.az["us-east-1a"]: Reading...
+aws_security_group.alb: Refreshing state... [id=sg-074f1ede9708f6882]
+aws_lb_target_group.svc["catalogue"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a]
+aws_lb_target_group.svc["auth"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f]
+aws_lb_target_group.svc["recommendations"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e]
+data.aws_subnet.az["us-east-1b"]: Read complete after 0s [id=subnet-0a9e38970aeff7cec]
+data.aws_subnet.az["us-east-1a"]: Read complete after 1s [id=subnet-082d1ab56ac41492f]
+aws_db_subnet_group.db: Refreshing state... [id=mini-netflix-s2]
+aws_security_group.app: Refreshing state... [id=sg-026031f1c88d521b3]
+aws_lb.alb: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04]
+aws_security_group.db: Refreshing state... [id=sg-053f24b1443553551]
+aws_db_instance.db: Refreshing state... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE]
+aws_lb_listener.http: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf]
+aws_launch_template.app: Refreshing state... [id=lt-0f5cef6dc2cc0ddb3]
+aws_autoscaling_group.app: Refreshing state... [id=mini-netflix-s2]
+aws_lb_listener_rule.auth: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/35e1479830ac8db6]
+aws_lb_listener_rule.recommendations: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/154b0aa8711ce904]
+aws_autoscaling_policy.cpu: Refreshing state... [id=cpu-target]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_group.app will be destroyed
+  - resource "aws_autoscaling_group" "app" {
+      - arn                              = "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2" -> null
+      - availability_zones               = [
+          - "us-east-1a",
+          - "us-east-1b",
+        ] -> null
+      - capacity_rebalance               = false -> null
+      - default_cooldown                 = 300 -> null
+      - default_instance_warmup          = 60 -> null
+      - desired_capacity                 = 2 -> null
+      - enabled_metrics                  = [
+          - "GroupDesiredCapacity",
+          - "GroupInServiceInstances",
+          - "GroupPendingInstances",
+          - "GroupTerminatingInstances",
+        ] -> null
+      - force_delete                     = false -> null
+      - force_delete_warm_pool           = false -> null
+      - health_check_grace_period        = 120 -> null
+      - health_check_type                = "ELB" -> null
+      - id                               = "mini-netflix-s2" -> null
+      - ignore_failed_scaling_activities = false -> null
+      - load_balancers                   = [] -> null
+      - max_instance_lifetime            = 0 -> null
+      - max_size                         = 4 -> null
+      - metrics_granularity              = "1Minute" -> null
+      - min_size                         = 2 -> null
+      - name                             = "mini-netflix-s2" -> null
+      - predicted_capacity               = 0 -> null
+      - protect_from_scale_in            = false -> null
+      - service_linked_role_arn          = "arn:aws:iam::238913834711:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling" -> null
+      - suspended_processes              = [] -> null
+      - target_group_arns                = [
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f",
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a",
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e",
+        ] -> null
+      - termination_policies             = [] -> null
+      - vpc_zone_identifier              = [
+          - "subnet-082d1ab56ac41492f",
+          - "subnet-0a9e38970aeff7cec",
+        ] -> null
+      - wait_for_capacity_timeout        = "10m" -> null
+      - warm_pool_size                   = 0 -> null
+        # (5 unchanged attributes hidden)
+
+      - availability_zone_distribution {
+          - capacity_distribution_strategy = "balanced-best-effort" -> null
+        }
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "default" -> null
+        }
+
+      - launch_template {
+          - id      = "lt-0f5cef6dc2cc0ddb3" -> null
+          - name    = "mini-netflix-s2-20261114181411817500000001" -> null
+          - version = "1" -> null
+        }
+
+      - tag {
+          - key                 = "Name" -> null
+          - propagate_at_launch = true -> null
+          - value               = "mini-netflix-s2" -> null
+        }
+
+      - traffic_source {
+          - identifier = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f" -> null
+          - type       = "elbv2" -> null
+        }
+      - traffic_source {
+          - identifier = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a" -> null
+          - type       = "elbv2" -> null
+        }
+      - traffic_source {
+          - identifier = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e" -> null
+          - type       = "elbv2" -> null
+        }
+    }
+
+  # aws_autoscaling_policy.cpu will be destroyed
+  - resource "aws_autoscaling_policy" "cpu" {
+      - arn                       = "arn:aws:autoscaling:us-east-1:238913834711:scalingPolicy:286aa47b-ada5-443d-8e76-8cab1d508888:autoScalingGroupName/mini-netflix-s2:policyName/cpu-target" -> null
+      - autoscaling_group_name    = "mini-netflix-s2" -> null
+      - cooldown                  = 0 -> null
+      - enabled                   = true -> null
+      - estimated_instance_warmup = 0 -> null
+      - id                        = "cpu-target" -> null
+      - min_adjustment_magnitude  = 0 -> null
+      - name                      = "cpu-target" -> null
+      - policy_type               = "TargetTrackingScaling" -> null
+      - scaling_adjustment        = 0 -> null
+        # (2 unchanged attributes hidden)
+
+      - target_tracking_configuration {
+          - disable_scale_in = false -> null
+          - target_value     = 50 -> null
+
+          - predefined_metric_specification {
+              - predefined_metric_type = "ASGAverageCPUUtilization" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_db_instance.db will be destroyed
+  - resource "aws_db_instance" "db" {
+      - address                               = "mini-netflix-s2.ck5cwoqgm1wx.us-east-1.rds.amazonaws.com" -> null
+      - allocated_storage                     = 20 -> null
+      - apply_immediately                     = true -> null
+      - arn                                   = "arn:aws:rds:us-east-1:238913834711:db:mini-netflix-s2" -> null
+      - auto_minor_version_upgrade            = true -> null
+      - availability_zone                     = "us-east-1b" -> null
+      - backup_retention_period               = 0 -> null
+      - backup_target                         = "region" -> null
+      - backup_window                         = "07:16-07:46" -> null
+      - ca_cert_identifier                    = "rds-ca-rsa2048-g1" -> null
+      - copy_tags_to_snapshot                 = false -> null
+      - customer_owned_ip_enabled             = false -> null
+      - database_insights_mode                = "standard" -> null
+      - db_name                               = "minix" -> null
+      - db_subnet_group_name                  = "mini-netflix-s2" -> null
+      - dedicated_log_volume                  = false -> null
+      - delete_automated_backups              = true -> null
+      - deletion_protection                   = false -> null
+      - domain_dns_ips                        = [] -> null
+      - enabled_cloudwatch_logs_exports       = [] -> null
+      - endpoint                              = "mini-netflix-s2.ck5cwoqgm1wx.us-east-1.rds.amazonaws.com:5432" -> null
+      - engine                                = "postgres" -> null
+      - engine_lifecycle_support              = "open-source-rds-extended-support" -> null
+      - engine_version                        = "16" -> null
+      - engine_version_actual                 = "16.13" -> null
+      - hosted_zone_id                        = "Z2R2ITUGPM61AM" -> null
+      - iam_database_authentication_enabled   = false -> null
+      - id                                    = "db-CMOVGYB4P2TZEHJ7CN7KKXHBBE" -> null
+      - identifier                            = "mini-netflix-s2" -> null
+      - instance_class                        = "db.t3.micro" -> null
+      - iops                                  = 0 -> null
+      - license_model                         = "postgresql-license" -> null
+      - listener_endpoint                     = [] -> null
+      - maintenance_window                    = "mon:09:21-mon:09:51" -> null
+      - master_user_secret                    = [] -> null
+      - max_allocated_storage                 = 0 -> null
+      - monitoring_interval                   = 0 -> null
+      - multi_az                              = false -> null
+      - network_type                          = "IPV4" -> null
+      - option_group_name                     = "default:postgres-16" -> null
+      - parameter_group_name                  = "default.postgres16" -> null
+      - password                              = (sensitive value) -> null
+      - password_wo                           = (write-only attribute) -> null
+      - performance_insights_enabled          = false -> null
+      - performance_insights_retention_period = 0 -> null
+      - port                                  = 5432 -> null
+      - publicly_accessible                   = false -> null
+      - replicas                              = [] -> null
+      - resource_id                           = "db-CMOVGYB4P2TZEHJ7CN7KKXHBBE" -> null
+      - skip_final_snapshot                   = true -> null
+      - status                                = "available" -> null
+      - storage_encrypted                     = false -> null
+      - storage_throughput                    = 0 -> null
+      - storage_type                          = "gp2" -> null
+      - tags                                  = {} -> null
+      - tags_all                              = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - username                              = "minix" -> null
+      - vpc_security_group_ids                = [
+          - "sg-053f24b1443553551",
+        ] -> null
+        # (16 unchanged attributes hidden)
+    }
+
+  # aws_db_subnet_group.db will be destroyed
+  - resource "aws_db_subnet_group" "db" {
+      - arn                     = "arn:aws:rds:us-east-1:238913834711:subgrp:mini-netflix-s2" -> null
+      - description             = "Managed by Terraform" -> null
+      - id                      = "mini-netflix-s2" -> null
+      - name                    = "mini-netflix-s2" -> null
+      - subnet_ids              = [
+          - "subnet-082d1ab56ac41492f",
+          - "subnet-0a9e38970aeff7cec",
+        ] -> null
+      - supported_network_types = [
+          - "IPV4",
+        ] -> null
+      - tags                    = {} -> null
+      - tags_all                = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - vpc_id                  = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_launch_template.app will be destroyed
+  - resource "aws_launch_template" "app" {
+      - arn                                  = "arn:aws:ec2:us-east-1:238913834711:launch-template/lt-0f5cef6dc2cc0ddb3" -> null
+      - default_version                      = 1 -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - id                                   = "lt-0f5cef6dc2cc0ddb3" -> null
+      - image_id                             = (sensitive value) -> null
+      - instance_type                        = "t3.micro" -> null
+      - latest_version                       = 1 -> null
+      - name                                 = "mini-netflix-s2-20261114181411817500000001" -> null
+      - name_prefix                          = "mini-netflix-s2-" -> null
+      - security_group_names                 = [] -> null
+      - tags                                 = {} -> null
+      - tags_all                             = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - user_data                            = (sensitive value) -> null
+      - vpc_security_group_ids               = [
+          - "sg-026031f1c88d521b3",
+        ] -> null
+        # (6 unchanged attributes hidden)
+
+      - iam_instance_profile {
+          - name = "mini-netflix-instance" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - metadata_options {
+          - http_put_response_hop_limit = 0 -> null
+          - http_tokens                 = "required" -> null
+            # (3 unchanged attributes hidden)
+        }
+
+      - monitoring {
+          - enabled = true -> null
+        }
+
+      - tag_specifications {
+          - resource_type = "instance" -> null
+          - tags          = {
+              - "Name"    = "mini-netflix-s2"
+              - "project" = "mini-netflix"
+              - "stage"   = "s2"
+            } -> null
+        }
+    }
+
+  # aws_lb.alb will be destroyed
+  - resource "aws_lb" "alb" {
+      - arn                                                          = "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04" -> null
+      - arn_suffix                                                   = "app/mini-netflix-s2/cba39aa792d9ec04" -> null
+      - client_keep_alive                                            = 3600 -> null
+      - desync_mitigation_mode                                       = "defensive" -> null
+      - dns_name                                                     = "mini-netflix-s2-1233323729.us-east-1.elb.amazonaws.com" -> null
+      - drop_invalid_header_fields                                   = false -> null
+      - enable_cross_zone_load_balancing                             = true -> null
+      - enable_deletion_protection                                   = false -> null
+      - enable_http2                                                 = true -> null
+      - enable_tls_version_and_cipher_suite_headers                  = false -> null
+      - enable_waf_fail_open                                         = false -> null
+      - enable_xff_client_port                                       = false -> null
+      - enable_zonal_shift                                           = false -> null
+      - id                                                           = "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04" -> null
+      - idle_timeout                                                 = 60 -> null
+      - internal                                                     = false -> null
+      - ip_address_type                                              = "ipv4" -> null
+      - load_balancer_type                                           = "application" -> null
+      - name                                                         = "mini-netflix-s2" -> null
+      - preserve_host_header                                         = false -> null
+      - security_groups                                              = [
+          - "sg-074f1ede9708f6882",
+        ] -> null
+      - subnets                                                      = [
+          - "subnet-082d1ab56ac41492f",
+          - "subnet-0a9e38970aeff7cec",
+        ] -> null
+      - tags                                                         = {} -> null
+      - tags_all                                                     = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - vpc_id                                                       = "vpc-06a0ddd29d1a7549d" -> null
+      - xff_header_processing_mode                                   = "append" -> null
+      - zone_id                                                      = "Z35SXDOTRQ7X7K" -> null
+        # (3 unchanged attributes hidden)
+
+      - access_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - connection_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - subnet_mapping {
+          - subnet_id            = "subnet-082d1ab56ac41492f" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - subnet_mapping {
+          - subnet_id            = "subnet-0a9e38970aeff7cec" -> null
+            # (4 unchanged attributes hidden)
+        }
+    }
+
+  # aws_lb_listener.http will be destroyed
+  - resource "aws_lb_listener" "http" {
+      - arn                                                                 = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf" -> null
+      - id                                                                  = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf" -> null
+      - load_balancer_arn                                                   = "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04" -> null
+      - port                                                                = 80 -> null
+      - protocol                                                            = "HTTP" -> null
+      - routing_http_response_server_enabled                                = true -> null
+      - tags                                                                = {} -> null
+      - tags_all                                                            = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+        # (11 unchanged attributes hidden)
+
+      - default_action {
+          - order            = 1 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a" -> null
+          - type             = "forward" -> null
+        }
+    }
+
+  # aws_lb_listener_rule.auth will be destroyed
+  - resource "aws_lb_listener_rule" "auth" {
+      - arn          = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/35e1479830ac8db6" -> null
+      - id           = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/35e1479830ac8db6" -> null
+      - listener_arn = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf" -> null
+      - priority     = 20 -> null
+      - tags         = {} -> null
+      - tags_all     = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+
+      - action {
+          - order            = 1 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f" -> null
+          - type             = "forward" -> null
+        }
+
+      - condition {
+          - path_pattern {
+              - values = [
+                  - "/login",
+                ] -> null
+            }
+        }
+    }
+
+  # aws_lb_listener_rule.recommendations will be destroyed
+  - resource "aws_lb_listener_rule" "recommendations" {
+      - arn          = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/154b0aa8711ce904" -> null
+      - id           = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/154b0aa8711ce904" -> null
+      - listener_arn = "arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf" -> null
+      - priority     = 10 -> null
+      - tags         = {} -> null
+      - tags_all     = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+
+      - action {
+          - order            = 1 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e" -> null
+          - type             = "forward" -> null
+        }
+
+      - condition {
+          - path_pattern {
+              - values = [
+                  - "/recommendations/*",
+                ] -> null
+            }
+        }
+    }
+
+  # aws_lb_target_group.svc["auth"] will be destroyed
+  - resource "aws_lb_target_group" "svc" {
+      - arn                                = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f" -> null
+      - arn_suffix                         = "targetgroup/mini-netflix-auth/a789f812ac5aed0f" -> null
+      - deregistration_delay               = "10" -> null
+      - id                                 = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f" -> null
+      - ip_address_type                    = "ipv4" -> null
+      - lambda_multi_value_headers_enabled = false -> null
+      - load_balancer_arns                 = [
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04",
+        ] -> null
+      - load_balancing_algorithm_type      = "round_robin" -> null
+      - load_balancing_anomaly_mitigation  = "off" -> null
+      - load_balancing_cross_zone_enabled  = "use_load_balancer_configuration" -> null
+      - name                               = "mini-netflix-auth" -> null
+      - port                               = 5003 -> null
+      - protocol                           = "HTTP" -> null
+      - protocol_version                   = "HTTP1" -> null
+      - proxy_protocol_v2                  = false -> null
+      - slow_start                         = 0 -> null
+      - tags                               = {} -> null
+      - tags_all                           = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - target_type                        = "instance" -> null
+      - vpc_id                             = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+
+      - health_check {
+          - enabled             = true -> null
+          - healthy_threshold   = 2 -> null
+          - interval            = 10 -> null
+          - matcher             = "200" -> null
+          - path                = "/health" -> null
+          - port                = "5001" -> null
+          - protocol            = "HTTP" -> null
+          - timeout             = 5 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - stickiness {
+          - cookie_duration = 86400 -> null
+          - enabled         = false -> null
+          - type            = "lb_cookie" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - target_failover {}
+
+      - target_group_health {
+          - dns_failover {
+              - minimum_healthy_targets_count      = "1" -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+          - unhealthy_state_routing {
+              - minimum_healthy_targets_count      = 1 -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+        }
+
+      - target_health_state {}
+    }
+
+  # aws_lb_target_group.svc["catalogue"] will be destroyed
+  - resource "aws_lb_target_group" "svc" {
+      - arn                                = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a" -> null
+      - arn_suffix                         = "targetgroup/mini-netflix-catalogue/94d907614fd3887a" -> null
+      - deregistration_delay               = "10" -> null
+      - id                                 = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a" -> null
+      - ip_address_type                    = "ipv4" -> null
+      - lambda_multi_value_headers_enabled = false -> null
+      - load_balancer_arns                 = [
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04",
+        ] -> null
+      - load_balancing_algorithm_type      = "round_robin" -> null
+      - load_balancing_anomaly_mitigation  = "off" -> null
+      - load_balancing_cross_zone_enabled  = "use_load_balancer_configuration" -> null
+      - name                               = "mini-netflix-catalogue" -> null
+      - port                               = 5001 -> null
+      - protocol                           = "HTTP" -> null
+      - protocol_version                   = "HTTP1" -> null
+      - proxy_protocol_v2                  = false -> null
+      - slow_start                         = 0 -> null
+      - tags                               = {} -> null
+      - tags_all                           = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - target_type                        = "instance" -> null
+      - vpc_id                             = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+
+      - health_check {
+          - enabled             = true -> null
+          - healthy_threshold   = 2 -> null
+          - interval            = 10 -> null
+          - matcher             = "200" -> null
+          - path                = "/health" -> null
+          - port                = "5001" -> null
+          - protocol            = "HTTP" -> null
+          - timeout             = 5 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - stickiness {
+          - cookie_duration = 86400 -> null
+          - enabled         = false -> null
+          - type            = "lb_cookie" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - target_failover {}
+
+      - target_group_health {
+          - dns_failover {
+              - minimum_healthy_targets_count      = "1" -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+          - unhealthy_state_routing {
+              - minimum_healthy_targets_count      = 1 -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+        }
+
+      - target_health_state {}
+    }
+
+  # aws_lb_target_group.svc["recommendations"] will be destroyed
+  - resource "aws_lb_target_group" "svc" {
+      - arn                                = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e" -> null
+      - arn_suffix                         = "targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e" -> null
+      - deregistration_delay               = "10" -> null
+      - id                                 = "arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e" -> null
+      - ip_address_type                    = "ipv4" -> null
+      - lambda_multi_value_headers_enabled = false -> null
+      - load_balancer_arns                 = [
+          - "arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04",
+        ] -> null
+      - load_balancing_algorithm_type      = "round_robin" -> null
+      - load_balancing_anomaly_mitigation  = "off" -> null
+      - load_balancing_cross_zone_enabled  = "use_load_balancer_configuration" -> null
+      - name                               = "mini-netflix-recommendations" -> null
+      - port                               = 5002 -> null
+      - protocol                           = "HTTP" -> null
+      - protocol_version                   = "HTTP1" -> null
+      - proxy_protocol_v2                  = false -> null
+      - slow_start                         = 0 -> null
+      - tags                               = {} -> null
+      - tags_all                           = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - target_type                        = "instance" -> null
+      - vpc_id                             = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+
+      - health_check {
+          - enabled             = true -> null
+          - healthy_threshold   = 2 -> null
+          - interval            = 10 -> null
+          - matcher             = "200" -> null
+          - path                = "/health" -> null
+          - port                = "5001" -> null
+          - protocol            = "HTTP" -> null
+          - timeout             = 5 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - stickiness {
+          - cookie_duration = 86400 -> null
+          - enabled         = false -> null
+          - type            = "lb_cookie" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - target_failover {}
+
+      - target_group_health {
+          - dns_failover {
+              - minimum_healthy_targets_count      = "1" -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+          - unhealthy_state_routing {
+              - minimum_healthy_targets_count      = 1 -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+        }
+
+      - target_health_state {}
+    }
+
+  # aws_security_group.alb will be destroyed
+  - resource "aws_security_group" "alb" {
+      - arn                    = "arn:aws:ec2:us-east-1:238913834711:security-group/sg-074f1ede9708f6882" -> null
+      - description            = "Managed by Terraform" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-074f1ede9708f6882" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "103.136.75.232/32",
+                ]
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "mini-netflix-s2-alb" -> null
+      - owner_id               = "238913834711" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - vpc_id                 = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_security_group.app will be destroyed
+  - resource "aws_security_group" "app" {
+      - arn                    = "arn:aws:ec2:us-east-1:238913834711:security-group/sg-026031f1c88d521b3" -> null
+      - description            = "Managed by Terraform" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-026031f1c88d521b3" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - from_port        = 5001
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-074f1ede9708f6882",
+                ]
+              - self             = false
+              - to_port          = 5003
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "mini-netflix-s2-app" -> null
+      - owner_id               = "238913834711" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - vpc_id                 = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_security_group.db will be destroyed
+  - resource "aws_security_group" "db" {
+      - arn                    = "arn:aws:ec2:us-east-1:238913834711:security-group/sg-053f24b1443553551" -> null
+      - description            = "Managed by Terraform" -> null
+      - egress                 = [] -> null
+      - id                     = "sg-053f24b1443553551" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - from_port        = 5432
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-026031f1c88d521b3",
+                ]
+              - self             = false
+              - to_port          = 5432
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "mini-netflix-s2-db" -> null
+      - owner_id               = "238913834711" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s2"
+        } -> null
+      - vpc_id                 = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # random_password.db will be destroyed
+  - resource "random_password" "db" {
+      - bcrypt_hash = (sensitive value) -> null
+      - id          = "none" -> null
+      - length      = 24 -> null
+      - lower       = true -> null
+      - min_lower   = 0 -> null
+      - min_numeric = 0 -> null
+      - min_special = 0 -> null
+      - min_upper   = 0 -> null
+      - number      = true -> null
+      - numeric     = true -> null
+      - result      = (sensitive value) -> null
+      - special     = false -> null
+      - upper       = true -> null
+    }
+
+  # random_password.token will be destroyed
+  - resource "random_password" "token" {
+      - bcrypt_hash = (sensitive value) -> null
+      - id          = "none" -> null
+      - length      = 32 -> null
+      - lower       = true -> null
+      - min_lower   = 0 -> null
+      - min_numeric = 0 -> null
+      - min_special = 0 -> null
+      - min_upper   = 0 -> null
+      - number      = true -> null
+      - numeric     = true -> null
+      - result      = (sensitive value) -> null
+      - special     = false -> null
+      - upper       = true -> null
+    }
+
+Plan: 0 to add, 0 to change, 17 to destroy.
+
+Changes to Outputs:
+  - asg_name               = "mini-netflix-s2" -> null
+  - azs                    = [
+      - "us-east-1a",
+      - "us-east-1b",
+    ] -> null
+  - catalogue_target_group = "mini-netflix-catalogue" -> null
+  - fis_templates          = {} -> null
+  - url                    = "http://mini-netflix-s2-1233323729.us-east-1.elb.amazonaws.com" -> null
+aws_lb_listener_rule.auth: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/35e1479830ac8db6]
+aws_lb_listener_rule.recommendations: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf/154b0aa8711ce904]
+aws_autoscaling_policy.cpu: Destroying... [id=cpu-target]
+aws_lb_listener_rule.auth: Destruction complete after 1s
+aws_lb_listener_rule.recommendations: Destruction complete after 1s
+aws_lb_listener.http: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/cba39aa792d9ec04/9cb94c71265bfddf]
+aws_autoscaling_policy.cpu: Destruction complete after 1s
+aws_autoscaling_group.app: Destroying... [id=mini-netflix-s2]
+aws_lb_listener.http: Destruction complete after 0s
+aws_lb.alb: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/cba39aa792d9ec04]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 00m10s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 00m10s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 00m20s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 00m20s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 00m30s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 00m30s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 00m40s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 00m40s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 00m50s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 00m50s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 01m00s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 01m00s elapsed]
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 01m10s elapsed]
+aws_lb.alb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...r/app/mini-netflix-s2/cba39aa792d9ec04, 01m10s elapsed]
+aws_lb.alb: Destruction complete after 1m11s
+aws_autoscaling_group.app: Still destroying... [id=mini-netflix-s2, 01m20s elapsed]
+aws_autoscaling_group.app: Destruction complete after 1m21s
+aws_lb_target_group.svc["catalogue"]: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/94d907614fd3887a]
+aws_lb_target_group.svc["auth"]: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/a789f812ac5aed0f]
+aws_lb_target_group.svc["recommendations"]: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/d6b322f1740eaf0e]
+aws_launch_template.app: Destroying... [id=lt-0f5cef6dc2cc0ddb3]
+aws_launch_template.app: Destruction complete after 1s
+aws_db_instance.db: Destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE]
+random_password.token: Destroying... [id=none]
+random_password.token: Destruction complete after 0s
+aws_lb_target_group.svc["recommendations"]: Destruction complete after 1s
+aws_lb_target_group.svc["catalogue"]: Destruction complete after 1s
+aws_lb_target_group.svc["auth"]: Destruction complete after 1s
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 00m10s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 00m20s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 00m30s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 00m40s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 00m50s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m00s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m10s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m20s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m30s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m40s elapsed]
+aws_db_instance.db: Still destroying... [id=db-CMOVGYB4P2TZEHJ7CN7KKXHBBE, 01m50s elapsed]
+aws_db_instance.db: Destruction complete after 1m53s
+aws_db_subnet_group.db: Destroying... [id=mini-netflix-s2]
+aws_security_group.db: Destroying... [id=sg-053f24b1443553551]
+random_password.db: Destroying... [id=none]
+random_password.db: Destruction complete after 0s
+aws_db_subnet_group.db: Destruction complete after 1s
+aws_security_group.db: Destruction complete after 2s
+aws_security_group.app: Destroying... [id=sg-026031f1c88d521b3]
+aws_security_group.app: Destruction complete after 2s
+aws_security_group.alb: Destroying... [id=sg-074f1ede9708f6882]
+aws_security_group.alb: Destruction complete after 2s
+
+Destroy complete! Resources: 17 destroyed.
+
+real	3m42.327s
+user	0m0.000s
+sys	0m0.015s

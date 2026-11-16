@@ -1,0 +1,124 @@
+{
+    "Activities": [
+        {
+            "ActivityId": "3366876d-513b-fd54-e45d-c721b002cdd8",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0ca467de91555eff1",
+            "Cause": "At 2026-11-14T18:31:36Z an instance was launched in response to an unhealthy instance needing to be replaced.",
+            "StartTime": "2026-11-14T18:31:37.983000+00:00",
+            "EndTime": "2026-11-14T18:32:43+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "c7f6876d-511b-d743-d471-92b34dea52c8",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Terminating EC2 instance: i-0ec15e90ae05ecb08",
+            "Cause": "At 2026-11-14T18:31:35Z an instance was taken out of service in response to an EC2 health check indicating it has been terminated or stopped.",
+            "StartTime": "2026-11-14T18:31:35.925000+00:00",
+            "EndTime": "2026-11-14T18:31:54+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "b716876d-4305-54f3-d168-d32a5b8d4550",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-086b576cba6caa4eb",
+            "Cause": "At 2026-11-14T18:27:43Z an instance was launched in response to an unhealthy instance needing to be replaced.",
+            "StartTime": "2026-11-14T18:27:45.109000+00:00",
+            "EndTime": "2026-11-14T18:28:52+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "44d6876d-42e7-5a90-a3d5-6b4aa4e0c3d8",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Terminating EC2 instance: i-08f2c055a705b703f",
+            "Cause": "At 2026-11-14T18:27:43Z an instance was taken out of service in response to an EC2 health check indicating it has been terminated or stopped.",
+            "StartTime": "2026-11-14T18:27:43.190000+00:00",
+            "EndTime": "2026-11-14T18:27:55+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "5536876d-343d-3a99-384b-19e0d657c42a",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-08f2c055a705b703f",
+            "Cause": "At 2026-11-14T18:23:41Z an instance was launched in response to an unhealthy instance needing to be replaced.",
+            "StartTime": "2026-11-14T18:23:42.926000+00:00",
+            "EndTime": "2026-11-14T18:24:47+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "d4d6876d-3420-e720-e4e6-7f264396b9fa",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Terminating EC2 instance: i-06db73ebdd23033ed",
+            "Cause": "At 2026-11-14T18:23:41Z an instance was taken out of service in response to an EC2 health check indicating it has been terminated or stopped.",
+            "StartTime": "2026-11-14T18:23:41.113000+00:00",
+            "EndTime": "2026-11-14T18:24:06+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "9ab6876d-2cce-79f2-5d5f-9593b29b8950",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0ec15e90ae05ecb08",
+            "Cause": "At 2026-11-14T18:21:39Z an instance was launched in response to an unhealthy instance needing to be replaced.",
+            "StartTime": "2026-11-14T18:21:41.150000+00:00",
+            "EndTime": "2026-11-14T18:22:46+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "4676876d-2cb2-6ab8-0fd4-91210ca99d73",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Terminating EC2 instance: i-0e7a1bd3b981046d0",
+            "Cause": "At 2026-11-14T18:21:39Z an instance was taken out of service in response to an EC2 health check indicating it has been terminated or stopped.",
+            "StartTime": "2026-11-14T18:21:39.354000+00:00",
+            "EndTime": "2026-11-14T18:21:51+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "b1a6876d-1d72-942f-2aa6-9a4c4c87ff34",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-06db73ebdd23033ed",
+            "Cause": "At 2026-11-14T18:17:25Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 2.  At 2026-11-14T18:17:27Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 2.",
+            "StartTime": "2026-11-14T18:17:29.510000+00:00",
+            "EndTime": "2026-11-14T18:18:34+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "3776876d-1d71-bdb1-7284-8c0d7af1026f",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0e7a1bd3b981046d0",
+            "Cause": "At 2026-11-14T18:17:25Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 2.  At 2026-11-14T18:17:27Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 2.",
+            "StartTime": "2026-11-14T18:17:29.455000+00:00",
+            "EndTime": "2026-11-14T18:18:34+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:40e50bea-112a-495d-92ae-bab627698f8d:autoScalingGroupName/mini-netflix-s2"
+        }
+    ]
+}

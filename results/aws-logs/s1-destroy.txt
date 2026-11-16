@@ -1,0 +1,182 @@
+data.aws_vpc.default: Reading...
+data.aws_ssm_parameter.al2023: Reading...
+data.aws_ssm_parameter.al2023: Read complete after 1s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+data.aws_vpc.default: Read complete after 2s [id=vpc-06a0ddd29d1a7549d]
+data.aws_subnet.az: Reading...
+aws_security_group.s1: Refreshing state... [id=sg-0e16a7e2f5d70f823]
+data.aws_subnet.az: Read complete after 0s [id=subnet-082d1ab56ac41492f]
+aws_instance.app: Refreshing state... [id=i-00ad93dd6be5f95b1]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.app will be destroyed
+  - resource "aws_instance" "app" {
+      - ami                                  = (sensitive value) -> null
+      - arn                                  = "arn:aws:ec2:us-east-1:238913834711:instance/i-00ad93dd6be5f95b1" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-1a" -> null
+      - cpu_core_count                       = 1 -> null
+      - cpu_threads_per_core                 = 2 -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - iam_instance_profile                 = "mini-netflix-instance" -> null
+      - id                                   = "i-00ad93dd6be5f95b1" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-07e6c2d78542792f5" -> null
+      - private_dns                          = "ip-172-31-11-51.ec2.internal" -> null
+      - private_ip                           = "172.31.11.51" -> null
+      - public_dns                           = "ec2-3-239-110-80.compute-1.amazonaws.com" -> null
+      - public_ip                            = "3.239.110.80" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "mini-netflix-s1",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-082d1ab56ac41492f" -> null
+      - tags                                 = {
+          - "Name" = "mini-netflix-s1"
+        } -> null
+      - tags_all                             = {
+          - "Name"    = "mini-netflix-s1"
+          - "project" = "mini-netflix"
+          - "stage"   = "s1"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data                            = "f357be9dc83bad674c354aaa33d3649f347ca5ec" -> null
+      - user_data_replace_on_change          = true -> null
+      - vpc_security_group_ids               = [
+          - "sg-0e16a7e2f5d70f823",
+        ] -> null
+        # (7 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count       = 1 -> null
+          - threads_per_core = 2 -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = false -> null
+          - iops                  = 3000 -> null
+          - tags                  = {
+              - "project" = "mini-netflix"
+              - "stage"   = "s1"
+            } -> null
+          - tags_all              = {
+              - "project" = "mini-netflix"
+              - "stage"   = "s1"
+            } -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-002f77110ae49cf2f" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp3" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_security_group.s1 will be destroyed
+  - resource "aws_security_group" "s1" {
+      - arn                    = "arn:aws:ec2:us-east-1:238913834711:security-group/sg-0e16a7e2f5d70f823" -> null
+      - description            = "Managed by Terraform" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0e16a7e2f5d70f823" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "103.136.75.232/32",
+                ]
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "mini-netflix-s1" -> null
+      - owner_id               = "238913834711" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "project" = "mini-netflix"
+          - "stage"   = "s1"
+        } -> null
+      - vpc_id                 = "vpc-06a0ddd29d1a7549d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+
+Changes to Outputs:
+  - instance_id = "i-00ad93dd6be5f95b1" -> null
+  - url         = "http://3.239.110.80" -> null
+aws_instance.app: Destroying... [id=i-00ad93dd6be5f95b1]
+aws_instance.app: Still destroying... [id=i-00ad93dd6be5f95b1, 00m10s elapsed]
+aws_instance.app: Still destroying... [id=i-00ad93dd6be5f95b1, 00m20s elapsed]
+aws_instance.app: Still destroying... [id=i-00ad93dd6be5f95b1, 00m30s elapsed]
+aws_instance.app: Destruction complete after 32s
+aws_security_group.s1: Destroying... [id=sg-0e16a7e2f5d70f823]
+aws_security_group.s1: Destruction complete after 1s
+
+Destroy complete! Resources: 2 destroyed.

@@ -1,0 +1,764 @@
+data.aws_ssm_parameter.al2023: Reading...
+data.aws_vpc.default: Reading...
+data.aws_ssm_parameter.al2023: Read complete after 1s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+data.aws_vpc.default: Read complete after 2s [id=vpc-06a0ddd29d1a7549d]
+data.aws_subnet.az["us-east-1b"]: Reading...
+data.aws_subnet.az["us-east-1a"]: Reading...
+data.aws_subnet.az["us-east-1a"]: Read complete after 0s [id=subnet-082d1ab56ac41492f]
+data.aws_subnet.az["us-east-1b"]: Read complete after 0s [id=subnet-0a9e38970aeff7cec]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_group.app will be created
+  + resource "aws_autoscaling_group" "app" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 60
+      + desired_capacity                 = 2
+      + enabled_metrics                  = [
+          + "GroupDesiredCapacity",
+          + "GroupInServiceInstances",
+          + "GroupPendingInstances",
+          + "GroupTerminatingInstances",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 120
+      + health_check_type                = "ELB"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 4
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 2
+      + name                             = "mini-netflix-s2"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + vpc_zone_identifier              = [
+          + "subnet-082d1ab56ac41492f",
+          + "subnet-0a9e38970aeff7cec",
+        ]
+      + wait_for_capacity_timeout        = "10m"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "mini-netflix-s2"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # aws_autoscaling_policy.cpu will be created
+  + resource "aws_autoscaling_policy" "cpu" {
+      + arn                     = (known after apply)
+      + autoscaling_group_name  = "mini-netflix-s2"
+      + enabled                 = true
+      + id                      = (known after apply)
+      + metric_aggregation_type = (known after apply)
+      + name                    = "cpu-target"
+      + policy_type             = "TargetTrackingScaling"
+
+      + target_tracking_configuration {
+          + disable_scale_in = false
+          + target_value     = 50
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ASGAverageCPUUtilization"
+            }
+        }
+    }
+
+  # aws_db_instance.db will be created
+  + resource "aws_db_instance" "db" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = true
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = 0
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = "minix"
+      + db_subnet_group_name                  = "mini-netflix-s2"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + deletion_protection                   = false
+      + domain_fqdn                           = (known after apply)
+      + endpoint                              = (known after apply)
+      + engine                                = "postgres"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = "16"
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = "mini-netflix-s2"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t3.micro"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = false
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = "gp2"
+      + tags_all                              = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + timezone                              = (known after apply)
+      + username                              = "minix"
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # aws_db_subnet_group.db will be created
+  + resource "aws_db_subnet_group" "db" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "mini-netflix-s2"
+      + name_prefix             = (known after apply)
+      + subnet_ids              = [
+          + "subnet-082d1ab56ac41492f",
+          + "subnet-0a9e38970aeff7cec",
+        ]
+      + supported_network_types = (known after apply)
+      + tags_all                = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + vpc_id                  = (known after apply)
+    }
+
+  # aws_launch_template.app will be created
+  + resource "aws_launch_template" "app" {
+      + arn                    = (known after apply)
+      + default_version        = (known after apply)
+      + id                     = (known after apply)
+      + image_id               = (sensitive value)
+      + instance_type          = "t3.micro"
+      + latest_version         = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "mini-netflix-s2-"
+      + tags_all               = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + user_data              = (sensitive value)
+      + vpc_security_group_ids = (known after apply)
+
+      + iam_instance_profile {
+          + name = "mini-netflix-instance"
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "Name"    = "mini-netflix-s2"
+              + "project" = "mini-netflix"
+              + "stage"   = "s2"
+            }
+        }
+    }
+
+  # aws_lb.alb will be created
+  + resource "aws_lb" "alb" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + client_keep_alive                                            = 3600
+      + desync_mitigation_mode                                       = "defensive"
+      + dns_name                                                     = (known after apply)
+      + drop_invalid_header_fields                                   = false
+      + enable_deletion_protection                                   = false
+      + enable_http2                                                 = true
+      + enable_tls_version_and_cipher_suite_headers                  = false
+      + enable_waf_fail_open                                         = false
+      + enable_xff_client_port                                       = false
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + idle_timeout                                                 = 60
+      + internal                                                     = (known after apply)
+      + ip_address_type                                              = (known after apply)
+      + load_balancer_type                                           = "application"
+      + name                                                         = "mini-netflix-s2"
+      + name_prefix                                                  = (known after apply)
+      + preserve_host_header                                         = false
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = [
+          + "subnet-082d1ab56ac41492f",
+          + "subnet-0a9e38970aeff7cec",
+        ]
+      + tags_all                                                     = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + vpc_id                                                       = (known after apply)
+      + xff_header_processing_mode                                   = "append"
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # aws_lb_listener.http will be created
+  + resource "aws_lb_listener" "http" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "HTTP"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags_all                                                              = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # aws_lb_listener_rule.auth will be created
+  + resource "aws_lb_listener_rule" "auth" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = (known after apply)
+      + priority     = 20
+      + tags_all     = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + values = [
+                  + "/login",
+                ]
+            }
+        }
+    }
+
+  # aws_lb_listener_rule.recommendations will be created
+  + resource "aws_lb_listener_rule" "recommendations" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = (known after apply)
+      + priority     = 10
+      + tags_all     = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + values = [
+                  + "/recommendations/*",
+                ]
+            }
+        }
+    }
+
+  # aws_lb_target_group.svc["auth"] will be created
+  + resource "aws_lb_target_group" "svc" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "10"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "mini-netflix-auth"
+      + name_prefix                        = (known after apply)
+      + port                               = 5003
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-06a0ddd29d1a7549d"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 10
+          + matcher             = "200"
+          + path                = "/health"
+          + port                = "5001"
+          + protocol            = "HTTP"
+          + timeout             = 5
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # aws_lb_target_group.svc["catalogue"] will be created
+  + resource "aws_lb_target_group" "svc" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "10"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "mini-netflix-catalogue"
+      + name_prefix                        = (known after apply)
+      + port                               = 5001
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-06a0ddd29d1a7549d"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 10
+          + matcher             = "200"
+          + path                = "/health"
+          + port                = "5001"
+          + protocol            = "HTTP"
+          + timeout             = 5
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # aws_lb_target_group.svc["recommendations"] will be created
+  + resource "aws_lb_target_group" "svc" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "10"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "mini-netflix-recommendations"
+      + name_prefix                        = (known after apply)
+      + port                               = 5002
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-06a0ddd29d1a7549d"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 10
+          + matcher             = "200"
+          + path                = "/health"
+          + port                = "5001"
+          + protocol            = "HTTP"
+          + timeout             = 5
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # aws_security_group.alb will be created
+  + resource "aws_security_group" "alb" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "103.136.75.232/32",
+                ]
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "mini-netflix-s2-alb"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + vpc_id                 = "vpc-06a0ddd29d1a7549d"
+    }
+
+  # aws_security_group.app will be created
+  + resource "aws_security_group" "app" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = []
+              + from_port        = 5001
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = (known after apply)
+              + self             = false
+              + to_port          = 5003
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "mini-netflix-s2-app"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + vpc_id                 = "vpc-06a0ddd29d1a7549d"
+    }
+
+  # aws_security_group.db will be created
+  + resource "aws_security_group" "db" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = []
+              + from_port        = 5432
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = (known after apply)
+              + self             = false
+              + to_port          = 5432
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "mini-netflix-s2-db"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = {
+          + "project" = "mini-netflix"
+          + "stage"   = "s2"
+        }
+      + vpc_id                 = "vpc-06a0ddd29d1a7549d"
+    }
+
+  # random_password.db will be created
+  + resource "random_password" "db" {
+      + bcrypt_hash = (sensitive value)
+      + id          = (known after apply)
+      + length      = 24
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + numeric     = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+  # random_password.token will be created
+  + resource "random_password" "token" {
+      + bcrypt_hash = (sensitive value)
+      + id          = (known after apply)
+      + length      = 32
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + numeric     = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+Plan: 17 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + asg_name               = "mini-netflix-s2"
+  + azs                    = [
+      + "us-east-1a",
+      + "us-east-1b",
+    ]
+  + catalogue_target_group = "mini-netflix-catalogue"
+  + fis_templates          = {}
+  + url                    = (known after apply)
+random_password.db: Creating...
+random_password.token: Creating...
+random_password.token: Creation complete after 0s [id=none]
+random_password.db: Creation complete after 0s [id=none]
+aws_db_subnet_group.db: Creating...
+aws_lb_target_group.svc["catalogue"]: Creating...
+aws_lb_target_group.svc["recommendations"]: Creating...
+aws_lb_target_group.svc["auth"]: Creating...
+aws_security_group.alb: Creating...
+aws_db_subnet_group.db: Creation complete after 2s [id=mini-netflix-s2]
+aws_lb_target_group.svc["auth"]: Creation complete after 3s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-auth/d9c6add34a3ae4d1]
+aws_lb_target_group.svc["recommendations"]: Creation complete after 3s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-recommendations/ae7ddaf4de0d45c6]
+aws_lb_target_group.svc["catalogue"]: Creation complete after 3s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:targetgroup/mini-netflix-catalogue/f5e8bff0cab6eff9]
+aws_security_group.alb: Creation complete after 5s [id=sg-05ad1d1d957728bdc]
+aws_lb.alb: Creating...
+aws_security_group.app: Creating...
+aws_security_group.app: Creation complete after 4s [id=sg-0353c9d2dda7f0e77]
+aws_security_group.db: Creating...
+aws_security_group.db: Creation complete after 4s [id=sg-006deccac9cf479d1]
+aws_db_instance.db: Creating...
+aws_lb.alb: Still creating... [00m10s elapsed]
+aws_db_instance.db: Still creating... [00m10s elapsed]
+aws_lb.alb: Still creating... [00m20s elapsed]
+aws_db_instance.db: Still creating... [00m20s elapsed]
+aws_lb.alb: Still creating... [00m30s elapsed]
+aws_db_instance.db: Still creating... [00m30s elapsed]
+aws_lb.alb: Still creating... [00m40s elapsed]
+aws_db_instance.db: Still creating... [00m40s elapsed]
+aws_lb.alb: Still creating... [00m50s elapsed]
+aws_db_instance.db: Still creating... [00m50s elapsed]
+aws_lb.alb: Still creating... [01m00s elapsed]
+aws_db_instance.db: Still creating... [01m00s elapsed]
+aws_lb.alb: Still creating... [01m10s elapsed]
+aws_db_instance.db: Still creating... [01m10s elapsed]
+aws_lb.alb: Still creating... [01m20s elapsed]
+aws_db_instance.db: Still creating... [01m20s elapsed]
+aws_lb.alb: Still creating... [01m30s elapsed]
+aws_db_instance.db: Still creating... [01m30s elapsed]
+aws_lb.alb: Still creating... [01m40s elapsed]
+aws_db_instance.db: Still creating... [01m40s elapsed]
+aws_lb.alb: Still creating... [01m50s elapsed]
+aws_db_instance.db: Still creating... [01m50s elapsed]
+aws_lb.alb: Still creating... [02m00s elapsed]
+aws_db_instance.db: Still creating... [02m00s elapsed]
+aws_lb.alb: Still creating... [02m10s elapsed]
+aws_lb.alb: Creation complete after 2m14s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:loadbalancer/app/mini-netflix-s2/a3f54aebd2b7289c]
+aws_lb_listener.http: Creating...
+aws_lb_listener.http: Creation complete after 1s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b]
+aws_lb_listener_rule.auth: Creating...
+aws_lb_listener_rule.recommendations: Creating...
+aws_lb_listener_rule.auth: Creation complete after 1s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b/09bccaf3652ea22f]
+aws_lb_listener_rule.recommendations: Creation complete after 1s [id=arn:aws:elasticloadbalancing:us-east-1:238913834711:listener-rule/app/mini-netflix-s2/a3f54aebd2b7289c/8c93966921f2918b/20f201987db489de]
+aws_db_instance.db: Still creating... [02m10s elapsed]
+aws_db_instance.db: Still creating... [02m20s elapsed]
+aws_db_instance.db: Still creating... [02m30s elapsed]
+aws_db_instance.db: Still creating... [02m40s elapsed]
+aws_db_instance.db: Still creating... [02m50s elapsed]
+aws_db_instance.db: Still creating... [03m00s elapsed]
+aws_db_instance.db: Still creating... [03m10s elapsed]
+aws_db_instance.db: Still creating... [03m20s elapsed]
+aws_db_instance.db: Still creating... [03m30s elapsed]
+aws_db_instance.db: Still creating... [03m40s elapsed]
+aws_db_instance.db: Still creating... [03m50s elapsed]
+aws_db_instance.db: Still creating... [04m00s elapsed]
+aws_db_instance.db: Still creating... [04m10s elapsed]
+aws_db_instance.db: Still creating... [04m20s elapsed]
+aws_db_instance.db: Still creating... [04m30s elapsed]
+aws_db_instance.db: Still creating... [04m40s elapsed]
+aws_db_instance.db: Still creating... [04m50s elapsed]
+aws_db_instance.db: Still creating... [05m00s elapsed]
+aws_db_instance.db: Creation complete after 5m2s [id=db-65XFEETQTSHQHFVPBSWPAANBFU]
+aws_launch_template.app: Creating...
+aws_launch_template.app: Creation complete after 7s [id=lt-0dcba797fc51de20c]
+aws_autoscaling_group.app: Creating...
+aws_autoscaling_group.app: Still creating... [00m10s elapsed]
+aws_autoscaling_group.app: Creation complete after 17s [id=mini-netflix-s2]
+aws_autoscaling_policy.cpu: Creating...
+aws_autoscaling_policy.cpu: Creation complete after 2s [id=cpu-target]
+
+Apply complete! Resources: 17 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+asg_name = "mini-netflix-s2"
+azs = [
+  "us-east-1a",
+  "us-east-1b",
+]
+catalogue_target_group = "mini-netflix-catalogue"
+fis_templates = tomap({})
+url = "http://mini-netflix-s2-1485409940.us-east-1.elb.amazonaws.com"
+
+real	5m50.744s
+user	0m0.000s
+sys	0m0.015s

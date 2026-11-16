@@ -1,0 +1,45 @@
+{
+  "label": "LOCAL-S2 E4 breaker-off run 1",
+  "run_dir": "D:\\IT457\\Project\\results\\local-s2\\e4-breaker-off\\run1",
+  "duration_s": 300.0,
+  "requests_total": 28440,
+  "throughput_rps": 94.8,
+  "home_requests": 17034,
+  "availability_pct": 59.628,
+  "slo_met": false,
+  "error_rate_all_pct": 28.291,
+  "status_counts": {
+    "200": 20394,
+    "502": 8046
+  },
+  "home_p50_ms": 8.1,
+  "home_p95_ms": 22.0,
+  "home_p99_ms": 35.3,
+  "degraded_seconds": 121,
+  "outage_seconds": 120,
+  "longest_outage_s": 120,
+  "fallback_pct_of_home": 0.0,
+  "events": [
+    {
+      "t": 62.8,
+      "action": "recs-down",
+      "target": "local",
+      "time_to_recover_s": null,
+      "degraded_seconds": 121,
+      "time_to_detect_s": null,
+      "time_to_restore_capacity_s": null
+    },
+    {
+      "t": 182.4,
+      "action": "recs-up",
+      "target": "local",
+      "time_to_recover_s": 0.5759999752044678,
+      "degraded_seconds": 1,
+      "time_to_detect_s": null,
+      "time_to_restore_capacity_s": null
+    }
+  ],
+  "mean_time_to_recover_s": 0.6,
+  "unrecovered_events": 1,
+  "mean_time_to_restore_capacity_s": null
+}

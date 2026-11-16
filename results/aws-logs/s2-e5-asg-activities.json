@@ -1,0 +1,88 @@
+{
+    "Activities": [
+        {
+            "ActivityId": "2c76876e-503e-af49-1df1-0b16ecee6030",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-09a5c005a6beb0f3e",
+            "Cause": "At 2026-11-14T19:41:14Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 3 to 4.",
+            "StartTime": "2026-11-14T19:41:16.075000+00:00",
+            "StatusCode": "WaitingForInstanceWarmup",
+            "Progress": 90,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "6fa6876e-4cb5-81d8-c9c2-8e30030d601d",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance.  Status Reason: You have requested more vCPU capacity than your current vCPU limit of 8 allows for the instance bucket that the specified instance type belongs to. Please visit http://aws.amazon.com/contact-us/ec2-request to request an adjustment to this limit. Launching EC2 instance failed.",
+            "Cause": "At 2026-11-14T19:40:16Z an instance was launched in response to an unhealthy instance needing to be replaced.",
+            "StartTime": "2026-11-14T19:40:18.144000+00:00",
+            "EndTime": "2026-11-14T19:40:18+00:00",
+            "StatusCode": "Failed",
+            "StatusMessage": "You have requested more vCPU capacity than your current vCPU limit of 8 allows for the instance bucket that the specified instance type belongs to. Please visit http://aws.amazon.com/contact-us/ec2-request to request an adjustment to this limit. Launching EC2 instance failed.",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "9b06876e-4ca0-412d-8e81-5a2e273259f1",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Terminating EC2 instance: i-0670e0b4e0653356d",
+            "Cause": "At 2026-11-14T19:40:16Z an instance was taken out of service in response to an ELB system health check failure.",
+            "StartTime": "2026-11-14T19:40:16.784000+00:00",
+            "EndTime": "2026-11-14T19:41:20+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "c516876e-452a-2730-c7b6-2f7bd16d6551",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0cfecae9a230a8da6",
+            "Cause": "At 2026-11-14T19:38:06Z a monitor alarm TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b in state ALARM triggered policy cpu-target changing the desired capacity from 3 to 4.  At 2026-11-14T19:38:12Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 3 to 4.",
+            "StartTime": "2026-11-14T19:38:14.537000+00:00",
+            "EndTime": "2026-11-14T19:38:20+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\",\"InvokingAlarms\":[{\"AlarmArn\":\"arn:aws:cloudwatch:us-east-1:238913834711:alarm:TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b\",\"Trigger\":{\"MetricName\":\"CPUUtilization\",\"EvaluateLowSampleCountPercentile\":\"\",\"ComparisonOperator\":\"GreaterThanThreshold\",\"TreatMissingData\":\"\",\"Statistic\":\"AVERAGE\",\"StatisticType\":\"Statistic\",\"Period\":60,\"EvaluationPeriods\":3,\"Unit\":null,\"Namespace\":\"AWS/EC2\",\"Threshold\":30},\"AlarmName\":\"TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b\",\"AlarmDescription\":\"DO NOT EDIT OR DELETE. For TargetTrackingScaling policy arn:aws:autoscaling:us-east-1:238913834711:scalingPolicy:f130541c-f843-4242-829d-f338d97538d7:autoScalingGroupName/mini-netflix-s2:policyName/cpu-target.\",\"AWSAccountId\":\"238913834711\",\"OldStateValue\":\"ALARM\",\"Region\":\"US East (N. Virginia)\",\"NewStateValue\":\"ALARM\",\"AlarmConfigurationUpdatedTimestamp\":1794684990116,\"StateChangeTime\":1794685026539}]}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "dff6876e-41a9-a804-46f7-827d4b6547d0",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0dc29460d2f297a61",
+            "Cause": "At 2026-11-14T19:37:06Z a monitor alarm TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b in state ALARM triggered policy cpu-target changing the desired capacity from 2 to 3.  At 2026-11-14T19:37:15Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 2 to 3.",
+            "StartTime": "2026-11-14T19:37:17.162000+00:00",
+            "EndTime": "2026-11-14T19:37:22+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\",\"InvokingAlarms\":[{\"AlarmArn\":\"arn:aws:cloudwatch:us-east-1:238913834711:alarm:TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b\",\"Trigger\":{\"MetricName\":\"CPUUtilization\",\"EvaluateLowSampleCountPercentile\":\"\",\"ComparisonOperator\":\"GreaterThanThreshold\",\"TreatMissingData\":\"\",\"Statistic\":\"AVERAGE\",\"StatisticType\":\"Statistic\",\"Period\":60,\"EvaluationPeriods\":3,\"Unit\":null,\"Namespace\":\"AWS/EC2\",\"Threshold\":30},\"AlarmName\":\"TargetTracking-mini-netflix-s2-AlarmHigh-c87f2f49-20b6-416d-a117-e680103f2c3b\",\"AlarmDescription\":\"DO NOT EDIT OR DELETE. For TargetTrackingScaling policy arn:aws:autoscaling:us-east-1:238913834711:scalingPolicy:f130541c-f843-4242-829d-f338d97538d7:autoScalingGroupName/mini-netflix-s2:policyName/cpu-target.\",\"AWSAccountId\":\"238913834711\",\"OldStateValue\":\"INSUFFICIENT_DATA\",\"Region\":\"US East (N. Virginia)\",\"NewStateValue\":\"ALARM\",\"AlarmConfigurationUpdatedTimestamp\":1794684990116,\"StateChangeTime\":1794685026539}]}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "1346876d-fc5f-fa2d-3361-16de72716fe3",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0a42b07638905cd0a",
+            "Cause": "At 2026-11-14T19:18:15Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 2.  At 2026-11-14T19:18:20Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 2.",
+            "StartTime": "2026-11-14T19:18:21.950000+00:00",
+            "EndTime": "2026-11-14T19:19:27+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az1\",\"Subnet ID\":\"subnet-082d1ab56ac41492f\",\"Availability Zone\":\"us-east-1a\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        },
+        {
+            "ActivityId": "6616876d-fc5c-65b5-3d6f-dedf0d16b10e",
+            "AutoScalingGroupName": "mini-netflix-s2",
+            "Description": "Launching a new EC2 instance: i-0670e0b4e0653356d",
+            "Cause": "At 2026-11-14T19:18:15Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 2.  At 2026-11-14T19:18:20Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 2.",
+            "StartTime": "2026-11-14T19:18:21.721000+00:00",
+            "EndTime": "2026-11-14T19:19:27+00:00",
+            "StatusCode": "Successful",
+            "Progress": 100,
+            "Details": "{\"Availability Zone ID\":\"use1-az2\",\"Subnet ID\":\"subnet-0a9e38970aeff7cec\",\"Availability Zone\":\"us-east-1b\"}",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:238913834711:autoScalingGroup:2c0d1935-5a9e-47ea-b412-e3c7dedc3ddb:autoScalingGroupName/mini-netflix-s2"
+        }
+    ]
+}

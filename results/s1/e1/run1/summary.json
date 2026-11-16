@@ -1,0 +1,37 @@
+{
+  "label": "S1 E1 run 1",
+  "run_dir": "D:\\IT457\\Project\\results\\s1\\e1\\run1",
+  "duration_s": 601.9,
+  "requests_total": 8016,
+  "throughput_rps": 13.3,
+  "home_requests": 4798,
+  "availability_pct": 37.474,
+  "slo_met": false,
+  "error_rate_all_pct": 61.814,
+  "status_counts": {
+    "0": 4611,
+    "200": 3061,
+    "500": 344
+  },
+  "home_p50_ms": 207.3,
+  "home_p95_ms": 233.0,
+  "home_p99_ms": 477.3,
+  "degraded_seconds": 538,
+  "outage_seconds": 537,
+  "longest_outage_s": 537,
+  "fallback_pct_of_home": 0.0,
+  "events": [
+    {
+      "t": 62.6,
+      "action": "stop",
+      "target": "i-00ad93dd6be5f95b1",
+      "time_to_recover_s": null,
+      "degraded_seconds": 538,
+      "time_to_detect_s": 1.8,
+      "time_to_restore_capacity_s": 72.9
+    }
+  ],
+  "mean_time_to_recover_s": null,
+  "unrecovered_events": 1,
+  "mean_time_to_restore_capacity_s": 72.9
+}
